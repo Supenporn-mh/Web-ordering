@@ -5,7 +5,6 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 const phone = route.query.phone as string || ''
-const mode = route.query.mode as string || 'login'
 
 const otp = ref(['', '', '', '', '', ''])
 const timer = ref(300) // 5 minutes (300 seconds)
@@ -61,7 +60,7 @@ const formatTime = (seconds: number) => {
     <div class="flex-1 space-y-10">
       <div class="flex justify-between gap-2">
         <input 
-          v-for="(digit, i) in otp" 
+          v-for="(_digit, i) in otp" 
           :key="i"
           :id="`otp-${i}`"
           v-model="otp[i]"
