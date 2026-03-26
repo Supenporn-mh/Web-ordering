@@ -1,0 +1,81 @@
+Project "Web Ordering" {
+  database_type: 'PostgreSQL'
+  Note: 'Database schema designed by Architecture Agent for Food Web Ordering Portal'
+}
+
+Table Customer {
+  id uuid [pk]
+  phone_number varchar [unique, note: 'Primary identifier for login/register']
+  name varchar [not null]
+  email varchar
+  created_at timestamp [default: `now()`]
+  updated_at timestamp
+}
+
+Table Branch {
+  id uuid [pk]
+  name varchar [not null]
+  address text
+  operating_hours varchar [note: 'e.g. 08:00-20:00']
+  is_active boolean [default: true]
+  created_at timestamp
+}
+
+Table Menu {
+  id uuid [pk]
+  branch_id uuid [ref: > Branch.id]
+  name varchar [not null]
+  description text
+  category varchar [not null]
+  price decimal(10,2) [not null]
+  image_url varchar
+  is_out_of_stock boolean [default: false]
+  created_at timestamp
+}
+
+Table AddonGroup {
+  id uuid [pk]
+  menu_id uuid [ref: > Menu.id, note: 'Linked specifically to a single menu']
+  name varchar [not null, note: 'e.g. Pick your meat / Choose spice level']
+  is_required boolean [default: false]
+  max_choices int [default: 1]
+}
+
+Table AddonItem {
+  id uuid [pk]
+  group_id uuid [ref: > AddonGroup.id]
+  name varchar [not null]
+  price decimal(10,2) [default: 0]
+}
+
+Table Order {
+  id uuid [pk]
+  customer_id uuid [ref: > Customer.id]
+  branch_id uuid [ref: > Branch.id]
+  total_amount decimal(10,2)
+  delivery_type varchar [note: 'DELIVERY | PICKUP']
+  delivery_address text
+  room_number varchar
+  hn_number varchar [note: 'Hospital Number']
+  pickup_time timestamp [note: 'Null if immediate']
+  payment_method varchar [note: '10 methods e.g. CreditCard, PromptPay, Cash, RoomService, etc.']
+  payment_status varchar [note: 'PENDING | PAID | FAILED']
+  order_status varchar [note: 'PENDING | PREPARING | COMPLETED | CANCELLED']
+  created_at timestamp [default: `now()`]
+}
+
+Table OrderItem {
+  id uuid [pk]
+  order_id uuid [ref: > Order.id]
+  menu_id uuid [ref: > Menu.id]
+  quantity int [not null]
+  price decimal(10,2) [note: 'Snapshot price at time of order']
+  note text [note: 'Customer special instructions']
+}
+
+Table OrderItemAddon {
+  id uuid [pk]
+  order_item_id uuid [ref: > OrderItem.id]
+  addon_item_id uuid [ref: > AddonItem.id]
+  price decimal(10,2) [note: 'Snapshot price']
+}

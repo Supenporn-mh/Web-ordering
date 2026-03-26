@@ -1,0 +1,158 @@
+{
+  "project": "Web Ordering Platform",
+  "version": "1.0.0",
+  "basePath": "/api/v1",
+  "endpoints": [
+    {
+      "comment": "Auth: Request OTP",
+      "method": "POST",
+      "url": "/auth/request-otp",
+      "request": {
+        "phoneNumber": "string"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "message": "OTP sent successfully",
+          "referenceNo": "string"
+        }
+      }
+    },
+    {
+      "comment": "Auth: Verify OTP (Login or proceed to register)",
+      "method": "POST",
+      "url": "/auth/verify-otp",
+      "request": {
+        "phoneNumber": "string",
+        "otp": "string",
+        "referenceNo": "string"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "isRegistered": "boolean",
+          "token": "string (JWT if registered, registrationToken if not)"
+        }
+      }
+    },
+    {
+      "comment": "Auth: Register Data",
+      "method": "POST",
+      "url": "/auth/register",
+      "headers": {
+        "Authorization": "Bearer registrationToken"
+      },
+      "request": {
+        "phoneNumber": "string",
+        "name": "string",
+        "email": "string"
+      },
+      "response": {
+        "status": 201,
+        "body": {
+          "customer": {
+            "id": "uuid",
+            "name": "string"
+          },
+          "token": "string (Auth JWT Token for API Calls)"
+        }
+      }
+    },
+    {
+      "comment": "Data: List Branches",
+      "method": "GET",
+      "url": "/branches",
+      "response": {
+        "status": 200,
+        "body": [
+          {
+            "id": "uuid",
+            "name": "string",
+            "operatingHours": "string",
+            "isOpen": "boolean"
+          }
+        ]
+      }
+    },
+    {
+      "comment": "Data: List Menus by Branch",
+      "method": "GET",
+      "url": "/branches/{branchId}/menus",
+      "response": {
+        "status": 200,
+        "body": [
+          {
+            "id": "uuid",
+            "name": "string",
+            "category": "string",
+            "price": "number",
+            "imageUrl": "string",
+            "isOutOfStock": "boolean"
+          }
+        ]
+      }
+    },
+    {
+      "comment": "Data: Menu Detail & Addons",
+      "method": "GET",
+      "url": "/menus/{menuId}",
+      "response": {
+        "status": 200,
+        "body": {
+          "id": "uuid",
+          "name": "string",
+          "price": "number",
+          "addonGroups": [
+            {
+              "id": "uuid",
+              "name": "string",
+              "isRequired": "boolean",
+              "maxChoices": "number",
+              "items": [
+                {
+                  "id": "uuid",
+                  "name": "string",
+                  "price": "number"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "comment": "Order: Submit Cart & Details",
+      "method": "POST",
+      "url": "/orders",
+      "headers": {
+        "Authorization": "Bearer jwt-token"
+      },
+      "request": {
+        "branchId": "uuid",
+        "deliveryType": "string (DELIVERY|PICKUP)",
+        "deliveryAddress": "string",
+        "roomNumber": "string",
+        "hnNumber": "string",
+        "pickupTime": "string (ISO8601)",
+        "paymentMethod": "string (CreditCard|PromptPay|MaeManee|Member|TrueMoney|Coupon|Cash|RoomService|Alipay|WechatPay)",
+        "items": [
+          {
+            "menuId": "uuid",
+            "quantity": "number",
+            "note": "string",
+            "addonItemIds": ["uuid"]
+          }
+        ]
+      },
+      "response": {
+        "status": 201,
+        "body": {
+          "orderId": "uuid",
+          "totalAmount": "number",
+          "paymentStatus": "string (PENDING|PAID)",
+          "paymentUrl": "string (for Pay Now gateways, null for Pay Later)"
+        }
+      }
+    }
+  ]
+}
