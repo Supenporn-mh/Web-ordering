@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -21,6 +21,14 @@ const timeSlots = Array.from({ length: 48 }, (_, i) => {
   const h = Math.floor(i / 2).toString().padStart(2, '0')
   const m = (i % 2 === 1 ? '30' : '00')
   return `${h}:${m}`
+})
+
+// สำหรับ Room Service: แสดงเฉพาะเวลาที่ >= เวลาปัจจุบัน + 2 ชั่วโมง
+const roomServiceTimeSlots = computed(() => {
+  const now = new Date()
+  now.setHours(now.getHours() + 2)
+  const minTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
+  return timeSlots.filter(t => t >= minTime)
 })
 
 watch([putInBox], () => {
@@ -54,17 +62,17 @@ const goNext = () => {
       <h1 class="text-[17px] font-medium text-gray-900 leading-none mt-0.5">ข้อมูลที่อยู่จัดส่ง</h1>
     </div>
 
-    <div class="p-5 space-y-5">
+    <div class="p-4 space-y-4">
       <!-- Contact Info Card -->
-      <div class="bg-white rounded-[1rem] p-5 shadow-sm space-y-4">
-        <h3 class="text-base font-bold text-gray-900">ข้อมูลติดต่อ<span class="text-red-500">*</span></h3>
-        <input type="text" value="นวิยา อินทรประสิทธิ์" class="w-full bg-white border border-gray-300 rounded-[0.6rem] py-3.5 px-4 font-medium text-gray-500 text-[15px] outline-none shadow-sm" />
-        <input type="text" value="0800987465" class="w-full bg-white border border-gray-300 rounded-[0.6rem] py-3.5 px-4 font-medium text-gray-500 text-[15px] outline-none shadow-sm" />
+      <div class="bg-white rounded-[1rem] p-4 shadow-sm space-y-3">
+        <h3 class="text-sm font-bold text-gray-900">ข้อมูลติดต่อ<span class="text-red-500">*</span></h3>
+        <input type="text" value="นวิยา อินทรประสิทธิ์" class="w-full bg-white border border-gray-300 rounded-[0.6rem] py-3 px-4 font-medium text-gray-500 text-[15px] outline-none shadow-sm" />
+        <input type="text" value="0800987465" class="w-full bg-white border border-gray-300 rounded-[0.6rem] py-3 px-4 font-medium text-gray-500 text-[15px] outline-none shadow-sm" />
       </div>
 
       <!-- Location Info Card -->
-      <div class="bg-white rounded-[1rem] p-5 shadow-sm space-y-5">
-        <h3 class="text-base font-bold text-gray-900 pb-1 border-b border-gray-100">สถานที่จัดส่ง<span class="text-red-500">*</span></h3>
+      <div class="bg-white rounded-[1rem] p-4 shadow-sm space-y-3">
+        <h3 class="text-sm font-bold text-gray-900 pb-1 border-b border-gray-100">สถานที่จัดส่ง<span class="text-red-500">*</span></h3>
         
         <!-- Delivery Option -->
         <div class="space-y-4 pt-1">
@@ -124,25 +132,38 @@ const goNext = () => {
           </div>
         </div>
 
-        <!-- Room Service Specific Tip/Notice -->
-        <div v-if="branchType === 'Room Service'" class="mt-4 p-4 bg-[#f0f9f9] rounded-xl border border-teal-50">
-           <p class="text-[12px] text-[#228085] font-medium leading-relaxed">
-             📍 <span class="font-bold">Room Service:</span> จัดส่งถึงห้องพักเท่านั้น 
-             <br/>
-             ⏰ ระยะเวลาจัดส่งขั้นต่ำ 2 ชั่วโมง (ระบุเวลาด้านล่าง)
-           </p>
-           <div class="mt-3 flex items-center justify-between bg-white p-3 rounded-lg border border-gray-100 shadow-sm">
-             <span class="text-sm font-bold text-gray-700">ระบุเวลาจัดส่ง</span>
-             <select v-model="scheduleTime" class="bg-gray-50 border border-gray-200 rounded-lg py-1 px-2 text-sm outline-none">
-                <option v-for="t in timeSlots" :key="t" :value="t">{{ t }}</option>
-             </select>
-           </div>
+        <!-- Room Service: รับทันที / ระบุเวลา -->
+        <div v-if="branchType === 'Room Service'" class="mt-1 space-y-2.5">
+          <p class="text-[12px] text-[#228085] font-medium">📍 Room Service: จัดส่งถึงห้องพักเท่านั้น</p>
+
+          <!-- รับทันที -->
+          <label class="flex items-center gap-3 cursor-pointer">
+            <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all" :class="pickupTimeOption === 'now' ? 'border-[#228085]' : 'border-gray-300'">
+              <div v-if="pickupTimeOption === 'now'" class="w-2.5 h-2.5 bg-[#228085] rounded-full"></div>
+            </div>
+            <input type="radio" value="now" v-model="pickupTimeOption" class="hidden" />
+            <span class="text-sm font-medium text-gray-700">รับทันที</span>
+          </label>
+
+          <!-- ระบุเวลา -->
+          <div class="flex items-center justify-between">
+            <label class="flex items-center gap-3 cursor-pointer">
+              <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all" :class="pickupTimeOption === 'schedule' ? 'border-[#228085]' : 'border-gray-300'">
+                <div v-if="pickupTimeOption === 'schedule'" class="w-2.5 h-2.5 bg-[#228085] rounded-full"></div>
+              </div>
+              <input type="radio" value="schedule" v-model="pickupTimeOption" class="hidden" />
+              <span class="text-sm font-medium text-gray-700">ระบุเวลา <span class="text-xs text-gray-400">(ขั้นต่ำ 2 ชั่วโมง)</span></span>
+            </label>
+            <select v-if="pickupTimeOption === 'schedule'" v-model="scheduleTime" class="bg-gray-50 border border-gray-200 rounded-lg py-1.5 px-3 text-sm outline-none focus:border-[#228085]">
+              <option v-for="t in roomServiceTimeSlots" :key="t" :value="t">{{ t }}</option>
+            </select>
+          </div>
         </div>
       </div>
 
       <!-- Note Card -->
-      <div class="bg-white rounded-[1rem] p-5 shadow-sm space-y-4">
-        <h3 class="text-base font-bold text-gray-900">หมายเหตุการสั่ง</h3>
+      <div class="bg-white rounded-[1rem] p-4 shadow-sm space-y-3">
+        <h3 class="text-sm font-bold text-gray-900">หมายเหตุการสั่ง</h3>
         
         <!-- Short-cut Buttons (Only for Store Pickup) -->
         <div v-if="deliveryOption === 'store'" class="flex gap-3 mb-2">
@@ -156,12 +177,12 @@ const goNext = () => {
           >รับกลับบ้าน</button>
         </div>
 
-        <textarea v-model="orderNote" placeholder="เพิ่มคำแนะนำพิเศษ..." class="w-full min-h-[90px] bg-white border border-gray-300 rounded-[0.6rem] py-3.5 px-4 font-medium text-gray-600 outline-none shadow-sm text-[15px] placeholder:text-gray-400"></textarea>
+        <textarea v-model="orderNote" placeholder="เพิ่มคำแนะนำพิเศษ..." class="w-full min-h-[80px] bg-white border border-gray-300 rounded-[0.6rem] py-3 px-4 font-medium text-gray-600 outline-none shadow-sm text-[15px] placeholder:text-gray-400"></textarea>
       </div>
 
       <!-- Action -->
-      <div class="pt-4">
-        <button @click="goNext" class="w-full py-4 rounded-[0.8rem] bg-[#228085] text-white font-medium text-lg shadow-sm active:scale-[0.98] transition-all">
+      <div class="pt-2">
+        <button @click="goNext" class="w-full py-3.5 rounded-[0.8rem] bg-[#228085] text-white font-medium text-base shadow-sm active:scale-[0.98] transition-all">
           ถัดไป
         </button>
       </div>
