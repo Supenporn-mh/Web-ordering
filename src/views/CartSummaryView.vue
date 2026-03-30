@@ -135,9 +135,9 @@ const handleConfirmOrder = () => {
         </div>
 
         <!-- Order Note Section -->
-        <div>
-          <p class="text-[16px] text-gray-300 mb-1">หมายเหตุการสั่ง</p>
-          <p class="text-[20px] font-bold text-gray-900 leading-tight">
+        <div class="bg-[#f8fbff] p-4 rounded-[18px] border border-gray-50/50">
+          <p class="text-[14px] font-bold text-gray-400 mb-1 uppercase tracking-wider">หมายเหตุการสั่ง</p>
+          <p class="text-[18px] font-bold text-gray-900 leading-tight">
             {{ deliveryOption === 'delivery' ? (putInBox === 'true' ? 'ใส่กล่อง' : '') : (pickupMode === 'dine-in' ? 'ทานที่ร้าน' : 'รับกลับบ้าน') }}
             {{ orderNote ? (deliveryOption === 'delivery' && putInBox === 'true' ? ', ' : '') + orderNote : '' }}
           </p>
@@ -159,9 +159,9 @@ const handleConfirmOrder = () => {
             <div class="flex-1 min-w-0">
                <div class="flex justify-between items-start mb-1">
                   <h4 class="font-bold text-gray-800 text-[16px] leading-tight pr-1 tracking-tight truncate">{{ item.name }}</h4>
-                  <div class="flex items-center gap-2.5">
-                    <button @click="openEditModal(item, index)" class="text-[13px] text-gray-300 font-bold hover:text-[#228085]">แก้ไข</button>
-                    <button @click="removeItem(index)" class="text-red-400 hover:text-red-500">
+                  <div class="flex items-center gap-2">
+                    <button @click="openEditModal(item, index)" class="px-3 py-1 rounded-full bg-[#f8fbff] border border-gray-100 text-[12px] text-[#228085] font-bold hover:bg-[#228085] hover:text-white transition-all">แก้ไข</button>
+                    <button @click="removeItem(index)" class="w-8 h-8 rounded-full flex items-center justify-center text-red-400 hover:bg-red-50 transition-all">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </button>
                   </div>
@@ -173,10 +173,10 @@ const handleConfirmOrder = () => {
                  </p>
                </div>
                <div class="flex justify-between items-center mt-3">
-                  <div class="flex items-center gap-4 bg-gray-50/80 p-1 rounded-full border border-gray-100">
-                     <button @click="updateQuantity(index, -1)" class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-gray-200 font-bold active:scale-90 shadow-sm">−</button>
+                  <div class="flex items-center gap-4 bg-[#f8fbff] p-1.5 rounded-full border border-gray-200 shadow-sm">
+                     <button @click="updateQuantity(index, -1)" class="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-[#228085] font-bold active:scale-90 shadow-sm">−</button>
                   <span class="text-[16px] font-bold text-gray-800 w-5 text-center">{{ item.qty || item.quantity }}</span>
-                  <button @click="updateQuantity(index, 1)" class="w-8 h-8 rounded-full bg-[#228085] flex items-center justify-center text-white font-bold active:scale-90 shadow-md">+</button>
+                  <button @click="updateQuantity(index, 1)" class="w-8 h-8 rounded-full bg-[#228085] border border-[#228085] flex items-center justify-center text-white font-bold active:scale-90 shadow-md">+</button>
                </div>
                <span class="text-[16px] font-bold text-[#228085]">฿{{ (item.price * (item.qty || item.quantity)).toLocaleString() }}</span>
             </div>
