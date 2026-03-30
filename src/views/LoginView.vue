@@ -4,9 +4,9 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const phoneOrEmail = ref('')
-const lang = ref(localStorage.getItem('user_lang') || 'EN')
+const lang = ref<'EN' | 'TH'>((localStorage.getItem('user_lang') as 'EN' | 'TH') || 'EN')
 
-const setLang = (val: string) => {
+const setLang = (val: 'EN' | 'TH') => {
   lang.value = val
   localStorage.setItem('user_lang', val)
 }
