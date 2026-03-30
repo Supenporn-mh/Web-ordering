@@ -168,8 +168,8 @@ const handleConfirmOrder = () => {
                </div>
                <div class="space-y-0.5">
                  <p v-if="index === 0" class="text-[14px] font-bold text-gray-800">เพิ่มผัก (+฿15)</p>
-                 <p v-if="item.desc" class="text-[13px] text-[#228085] font-bold line-clamp-1">
-                   <span class="text-gray-300">หมายเหตุ :</span> {{ item.desc }}
+                 <p v-if="item.desc" class="text-[14px] text-[#228085] font-bold line-clamp-1">
+                   <span class="text-gray-600 font-bold">หมายเหตุ :</span> {{ item.desc }}
                  </p>
                </div>
                <div class="flex justify-between items-center mt-3">
