@@ -187,19 +187,21 @@ const addToCart = () => {
       <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px]" @click="isModalOpen = false"></div>
       <div class="bg-white rounded-[32px] w-full max-w-sm overflow-hidden shadow-2xl relative animate-in fade-in zoom-in duration-200">
         <img :src="selectedItem?.img" class="w-full h-56 object-cover" />
-        <button @click="isModalOpen = false" class="absolute top-4 right-4 bg-white/20 backdrop-blur-md text-white p-2 rounded-full hover:bg-white/40 transition-all">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
-        </button>
+        <div class="absolute top-4 right-4 z-50">
+          <button @click="isModalOpen = false" class="bg-gray-100/90 backdrop-blur-md text-gray-700 p-2.5 rounded-full hover:bg-gray-200 transition-all border border-gray-200">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
         
         <div class="p-6">
           <h2 class="text-[20px] font-bold text-gray-900">{{ selectedItem?.name }}</h2>
           <p class="text-gray-500 text-[14px] mt-2 leading-relaxed">{{ selectedItem?.desc }}</p>
           
           <div class="flex items-center justify-between mt-8">
-            <div class="flex items-center bg-gray-50 rounded-full p-1 border border-gray-100">
-              <button @click="quantity > 1 ? quantity-- : null" class="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm text-gray-600 hover:bg-gray-100">-</button>
-              <span class="w-12 text-center font-bold text-[18px]">{{ quantity }}</span>
-              <button @click="quantity++" class="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm text-gray-600 hover:bg-gray-100">+</button>
+            <div class="flex items-center bg-[#f0f4f4] rounded-full p-1.5 border border-gray-200 shadow-sm">
+              <button @click="quantity > 1 ? quantity-- : null" class="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm text-[#228085] font-bold active:scale-95 transition-all">-</button>
+              <span class="w-12 text-center font-bold text-[18px] text-gray-800">{{ quantity }}</span>
+              <button @click="quantity++" class="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm text-[#228085] font-bold active:scale-95 transition-all">+</button>
             </div>
             <div class="text-[24px] font-bold text-[#228085]">฿{{ (selectedItem?.price * quantity).toLocaleString() }}</div>
           </div>
@@ -207,7 +209,7 @@ const addToCart = () => {
           <textarea 
             v-model="note" 
             placeholder="คำแนะนำพิเศษ (ถ้ามี)"
-            class="w-full mt-6 bg-gray-50 rounded-2xl p-4 text-[14px] border border-gray-100 focus:border-[#228085] focus:bg-white transition-all outline-none resize-none"
+            class="w-full mt-6 bg-[#f0f4f4] rounded-2xl p-4 text-[15px] font-medium text-gray-800 border border-gray-200 focus:ring-2 focus:ring-[#228085]/20 focus:bg-white transition-all outline-none resize-none placeholder:text-gray-500"
             rows="3"
           ></textarea>
           

@@ -49,7 +49,7 @@ const t = {
         </button>
         <button 
           @click="setLang('TH')"
-          :class="lang === 'TH' ? 'bg-[#228085] text-white shadow-sm' : 'text-gray-400'"
+          :class="lang === 'TH' ? 'bg-[#228085] text-white shadow-sm' : 'text-gray-600'"
           class="px-4 py-1.5 rounded-full text-xs font-semibold transition-all"
         >
           TH
@@ -71,7 +71,7 @@ const t = {
           v-model="phoneOrEmail"
           type="text" 
           :placeholder="t.placeholder[lang]"
-          class="w-full bg-white border-none focus:ring-2 focus:ring-[#228085]/50 rounded-[18px] py-4.5 px-6 text-gray-700 font-medium outline-none transition-all placeholder:text-gray-300 shadow-sm text-[16px]"
+          class="w-full bg-white border-none focus:ring-2 focus:ring-[#228085]/50 rounded-[18px] py-4.5 px-6 text-gray-700 font-medium outline-none transition-all placeholder:text-gray-500 shadow-sm text-[16px]"
         />
       </div>
 
