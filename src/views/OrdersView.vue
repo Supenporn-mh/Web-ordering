@@ -1,123 +1,168 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const activeTab = ref('current') // current | past
+const activeTab = ref('active')
+const currentLang = ref('TH')
 
-const currentOrders = [
-  { id: '#1202603170001', date: 'Mar 17, 2026 at 07:00 AM 14:14', items: '1x กรีกสลัด', total: '210.00', type: 'สั่งกลับบ้าน', status: 'รอดำเนินการ', statusColor: 'bg-[#eaa636]' },
-  { id: '#1202603160001', date: 'Mar 16, 2026 at 07:00 AM 16:51', items: '1x แกงเขียวหวานทำจากนมถั่วเหลืองเสิร์ฟกับข้าวกล้อง...', total: '260.00', type: 'สั่งกลับบ้าน', status: 'รอดำเนินการ', statusColor: 'bg-[#eaa636]' },
-  { id: '#1202603130008', date: 'Mar 13, 2026 at 07:00 AM 18:52', items: '1x กรีกสลัด', total: '210.00', type: 'สั่งกลับบ้าน', status: 'รอดำเนินการ', statusColor: 'bg-[#eaa636]' }
-]
+onMounted(() => {
+  currentLang.value = localStorage.getItem('user_lang') || 'TH'
+})
 
-const pastOrders = [
-  { id: '#1202603020005', date: 'Mar 2, 2026 at 07:00 AM 14:49', items: '1x เส้นหมี่น้ำยาปู (ขนุนอ่อน)', total: '280.00', type: 'สั่งกลับบ้าน', status: 'ยกเลิก', statusColor: 'bg-[#db5b60]' },
-  { id: '#1202602190003', date: 'Feb 19, 2026 at 07:00 AM 10:53', items: '1x เส้นหมี่น้ำยาปู (ขนุนอ่อน)', total: '270.00', type: 'ส่งที่ห้อง', status: 'ยกเลิก', statusColor: 'bg-[#db5b60]' },
-  { id: '#1202602190002', date: 'Feb 19, 2026 at 07:00 AM 10:53', items: '1x ไมโล', total: '15.00', type: 'ส่งที่ห้อง', status: 'ยกเลิก', statusColor: 'bg-[#db5b60]' }
-]
-
-const viewOrderDetail = (orderId: string) => {
-  router.push({ name: 'success', query: { id: orderId } })
+const translations: any = {
+  TH: {
+    title: 'คำสั่งซื้อของฉัน',
+    subTitle: 'ติดตามคำสั่งซื้อของคุณ',
+    tabActive: 'กำลังดำเนินการ',
+    tabHistory: 'ประวัติคำสั่งซื้อ',
+    noOrders: 'ยังไม่มีรายการคำสั่งซื้อ',
+    orderNumPrefix: '#',
+    statusPending: 'รอดำเนินการ',
+    typeLabel: 'ประเภท:',
+    totalLabel: 'ยอดรวม',
+    takeaway: 'สั่งกลับบ้าน',
+    menu: 'เมนู',
+    orders: 'คำสั่งซื้อ',
+    profile: 'โปรไฟล์'
+  },
+  EN: {
+    title: 'My Orders',
+    subTitle: 'Track your orders',
+    tabActive: 'Active',
+    tabHistory: 'History',
+    noOrders: 'No orders found',
+    orderNumPrefix: '#',
+    statusPending: 'Pending',
+    typeLabel: 'Type:',
+    totalLabel: 'Total',
+    takeaway: 'Takeaway',
+    menu: 'Menu',
+    orders: 'Orders',
+    profile: 'Profile'
+  }
 }
+
+const t = computed(() => translations[currentLang.value] || translations.TH)
+
+// Mock data based on the screenshot
+const mockOrders = [
+  {
+    id: '1202603170001',
+    date: 'Mar 17, 2026 at 07:00 AM 14:14',
+    items: [{ name: 'กรีนสลัด', qty: 1, price: 210.00 }],
+    type: 'สั่งกลับบ้าน',
+    status: 'Pending',
+    total: 210.00
+  },
+  {
+    id: '1202603160001',
+    date: 'Mar 16, 2026 at 07:00 AM 16:51',
+    items: [{ name: 'แกงเขียวหวานทำจากนมถั่วเหลืองเสิร์ฟกับข้าวกล้อง...', qty: 1, price: 260.00 }],
+    type: 'สั่งกลับบ้าน',
+    status: 'Pending',
+    total: 260.00
+  },
+  {
+    id: '1202603130008',
+    date: 'Mar 13, 2026 at 07:00 AM 18:52',
+    items: [{ name: 'กรีนสลัด', qty: 1, price: 210.00 }],
+    type: 'สั่งกลับบ้าน',
+    status: 'Pending',
+    total: 210.00
+  }
+]
+
+const orders = ref<any[]>(mockOrders)
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#e7f4f3] font-sans pb-28">
-    <!-- Header -->
-    <div class="px-6 py-6 bg-white sticky top-0 z-20">
-      <h1 class="text-lg font-bold text-gray-900 mb-1">คำสั่งซื้อของฉัน</h1>
-      <p class="text-sm text-gray-400 font-medium">ติดตามคำสั่งซื้อของคุณ</p>
+  <div class="min-h-screen bg-[#f8fcfc] font-sans pb-32">
+    <!-- Header (Based on screenshot) -->
+    <div class="px-6 pt-10 pb-6 flex justify-between items-start">
+      <div>
+        <h1 class="text-[24px] font-bold text-gray-900 tracking-tight">{{ t.title }}</h1>
+        <p class="text-[14px] text-gray-400 font-medium tracking-wide">{{ t.subTitle }}</p>
+      </div>
     </div>
 
-    <!-- Tabs -->
-    <div class="px-6 py-2 bg-white sticky top-[84px] z-10 border-b border-gray-50 mb-4">
-      <div class="flex bg-[#f4f6fa] rounded-[1rem] p-1">
+    <!-- Tabs (Based on screenshot, standardized to system rounded-24) -->
+    <div class="px-5 mb-8">
+      <div class="bg-gray-100/60 p-1.5 rounded-[24px] flex gap-2">
         <button 
-          @click="activeTab = 'current'"
-          :class="activeTab === 'current' ? 'bg-white shadow-sm text-gray-900 font-bold' : 'text-gray-500 font-medium'"
-          class="flex-1 py-3 rounded-[0.8rem] text-sm transition-all"
+          @click="activeTab = 'active'"
+          :class="activeTab === 'active' ? 'bg-white text-gray-900 shadow-sm font-bold' : 'text-gray-400 font-bold'"
+          class="flex-1 py-3.5 rounded-[20px] text-[16px] transition-all"
         >
-          กำลังดำเนินการ
+          {{ t.tabActive }}
         </button>
         <button 
-          @click="activeTab = 'past'"
-          :class="activeTab === 'past' ? 'bg-white shadow-sm text-gray-900 font-bold' : 'text-gray-500 font-medium'"
-          class="flex-1 py-3 rounded-[0.8rem] text-sm transition-all"
+          @click="activeTab = 'history'"
+          :class="activeTab === 'history' ? 'bg-white text-gray-900 shadow-sm font-bold' : 'text-gray-400 font-bold'"
+          class="flex-1 py-3.5 rounded-[20px] text-[16px] transition-all"
         >
-          ประวัติคำสั่งซื้อ
+          {{ t.tabHistory }}
         </button>
       </div>
     </div>
 
-    <!-- Current Orders List -->
-    <div class="px-5 space-y-4" v-if="activeTab === 'current'">
-      <div v-for="order in currentOrders" :key="order.id" @click="viewOrderDetail(order.id)" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col cursor-pointer active:scale-[0.98] transition-all">
-        <div class="flex justify-between items-center mb-1">
-          <h3 class="font-bold text-[17px] text-[#0e1f32] tracking-tighter">{{ order.id }}</h3>
-          <span :class="order.statusColor" class="text-white text-[11px] font-bold px-3 py-1 rounded-full whitespace-nowrap">{{ order.status }}</span>
-        </div>
-        <p class="text-[13px] text-[#6b7785] font-medium mb-3">{{ order.date }}</p>
-        
-        <div class="flex justify-between items-start mb-4">
-          <p class="text-[14px] font-medium text-[#4a5568]">{{ order.items }}</p>
-          <p class="font-bold text-[#0e1f32] text-[14px]">฿{{ order.total }}</p>
-        </div>
+    <!-- Orders List (Based on screenshot card design) -->
+    <div class="px-5 space-y-5">
+      <div v-if="orders.length === 0" class="flex flex-col items-center justify-center py-20 opacity-40">
+        <p class="text-gray-500 font-bold text-[18px]">{{ t.noOrders }}</p>
+      </div>
+      
+      <!-- Order Card -->
+      <div v-for="order in orders" :key="order.id" class="bg-white rounded-[24px] p-6 shadow-sm border border-gray-50/50 flex flex-col gap-4">
+         <!-- Order Header -->
+         <div class="flex justify-between items-start">
+            <div>
+               <h3 class="text-[18px] font-bold text-gray-800 tracking-tight">{{ t.orderNumPrefix }}{{ order.id }}</h3>
+               <p class="text-[13px] text-gray-400 font-medium mt-1">{{ order.date }}</p>
+            </div>
+            <!-- Status Badge (Orange as per screenshot) -->
+            <span class="px-4 py-1.5 rounded-full bg-[#f6ab40] text-white text-[13px] font-bold shadow-sm shadow-orange-500/10">
+               {{ t.statusPending }}
+            </span>
+         </div>
 
-        <div class="border-t border-gray-100 py-3 mt-auto space-y-2">
-          <div class="flex justify-between items-center">
-            <span class="text-[13px] font-medium text-[#6b7785]">ประเภท:</span>
-            <span class="font-bold text-[#4a5568] text-[13px]">{{ order.type }}</span>
-          </div>
-          <div class="flex justify-between items-center pb-1">
-            <span class="font-bold text-[14px] text-[#0e1f32]">ยอดรวม</span>
-             <!-- Using Custom Brand Color instead of the Blue from the mock image -->
-            <span class="font-black text-xl text-[#228085]">฿{{ order.total }}</span>
-          </div>
-        </div>
+         <!-- Items List -->
+         <div class="mt-2 space-y-3">
+            <div v-for="item in order.items" :key="item.name" class="flex justify-between items-start">
+               <span class="text-[15px] font-bold text-gray-700 w-[70%] leading-snug">{{ item.qty }}x {{ item.name }}</span>
+               <span class="text-[15px] font-bold text-gray-900 shrink-0">฿{{ item.price.toFixed(2) }}</span>
+            </div>
+         </div>
+
+         <!-- Details Footer -->
+         <div class="mt-4 pt-4 border-t border-gray-50/80 space-y-2">
+            <div class="flex justify-between items-center text-[14px]">
+               <span class="text-gray-400 font-bold">{{ t.typeLabel }}</span>
+               <span class="text-gray-800 font-bold">{{ t.takeaway }}</span>
+            </div>
+            <div class="flex justify-between items-center text-[18px]">
+               <span class="text-gray-900 font-bold">{{ t.totalLabel }}</span>
+               <span class="text-[#228085] font-bold">฿{{ order.total.toFixed(2) }}</span>
+            </div>
+         </div>
       </div>
     </div>
 
-    <!-- Past Orders List -->
-    <div class="px-5 space-y-4" v-if="activeTab === 'past'">
-      <div v-for="order in pastOrders" :key="order.id" @click="viewOrderDetail(order.id)" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col cursor-pointer active:scale-[0.98] transition-all opacity-80">
-        <div class="flex justify-between items-center mb-1">
-          <h3 class="font-bold text-[17px] text-gray-500 tracking-tighter">{{ order.id }}</h3>
-          <span :class="order.statusColor" class="text-white text-[11px] font-bold px-3 py-1 rounded-full whitespace-nowrap">{{ order.status }}</span>
-        </div>
-        <p class="text-[13px] text-gray-400 font-medium mb-3">{{ order.date }}</p>
-        
-        <div class="flex justify-between items-start mb-4">
-          <p class="text-[14px] font-medium text-gray-500">{{ order.items }}</p>
-          <p class="font-bold text-gray-500 text-[14px]">฿{{ order.total }}</p>
-        </div>
+    <!-- Standardized Bottom Nav -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-50 flex h-[85px] items-center justify-around z-50 pb-safe shadow-[0_-5px_25px_rgba(0,0,0,0.03)] px-4">
+      <div @click="router.push({ name: 'menu' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-400 cursor-pointer w-24 h-full active:scale-95 transition-all">
+         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 2v7c0 1.1.9 2 2 2h4v10h2V11h4c1.1 0 2-.9 2-2V2H3z m8 7H5V4h1v5h1V4h1v5h1V4h1v5h1V4h2v5z"/></svg>
+         <span class="text-[12px] font-bold tracking-tight">{{ t.menu }}</span>
+      </div>
+      
+      <div class="flex flex-col items-center justify-center gap-1.5 text-[#228085] cursor-pointer w-24 h-full relative">
+         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+         <span class="text-[12px] font-bold tracking-tight">{{ t.orders }}</span>
+      </div>
 
-        <div class="border-t border-gray-100 py-3 mt-auto space-y-2">
-          <div class="flex justify-between items-center">
-            <span class="text-[13px] font-medium text-gray-400">ประเภท:</span>
-            <span class="font-bold text-gray-500 text-[13px]">{{ order.type }}</span>
-          </div>
-          <div class="flex justify-between items-center pb-1">
-            <span class="font-bold text-[14px] text-gray-500">ยอดรวม</span>
-            <span class="font-black text-xl text-gray-400">฿{{ order.total }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bottom Tab Bar -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 flex h-20 items-center justify-around z-30 pb-safe">
-      <div @click="router.push({ name: 'menu' })" class="flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-gray-600 cursor-pointer w-20 h-full">
-        <span class="text-2xl leading-none">🍴</span>
-        <span class="text-[10px] font-bold tracking-tight">เมนู</span>
-      </div>
-      <div class="flex flex-col items-center justify-center gap-1 text-[#228085] cursor-pointer w-20 h-full">
-        <span class="text-2xl leading-none">📋</span>
-        <span class="text-[10px] font-bold tracking-tight">คำสั่งซื้อ</span>
-      </div>
-      <div @click="router.push({ name: 'login'})" class="flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-gray-600 cursor-pointer w-20 h-full">
-        <span class="text-2xl leading-none">👤</span>
-        <span class="text-[10px] font-bold tracking-tight">ออกจากระบบ</span>
+      <div @click="router.push({ name: 'profile' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-400 cursor-pointer w-24 h-full group active:scale-95 transition-all">
+         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+         <span class="text-[12px] font-bold tracking-tight">{{ t.profile }}</span>
       </div>
     </div>
   </div>

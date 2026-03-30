@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 const phone = route.query.phone as string || ''
+const mode = route.query.mode as string || ''
 
 const otp = ref(['', '', '', '', '', ''])
 const timer = ref(300) // 5 minutes (300 seconds)
@@ -22,20 +23,15 @@ onUnmounted(() => {
 
 const handleInput = (index: number, e: any) => {
   const val = e.target.value
-  if (val.length > 1) {
-    otp.value[index] = val.slice(-1)
-  }
-  
-  if (val && index < 5) {
-    const nextInput = document.getElementById(`otp-${index + 1}`)
-    nextInput?.focus()
-  }
+  if (val.length > 1) otp.value[index] = val.slice(-1)
+  if (val && index < 5) document.getElementById(`otp-${index + 1}`)?.focus()
 }
 
 const handleVerify = () => {
   const fullOtp = otp.value.join('')
   if (fullOtp.length === 6) {
-    router.push({ name: 'branch' })
+    if (mode === 'register') router.push({ name: 'register', query: { phone: phone } })
+    else router.push({ name: 'branch' })
   }
 }
 
@@ -47,54 +43,49 @@ const formatTime = (seconds: number) => {
 </script>
 
 <template>
-  <div class="min-h-screen sm:max-w-md sm:mx-auto bg-white flex flex-col px-8 pt-20 pb-10">
-    <button @click="router.back()" class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center mb-8 border border-gray-100 active:scale-95 transition-all">
-      <span class="text-xl font-bold text-gray-600">←</span>
+  <div class="min-h-screen sm:max-w-md sm:mx-auto bg-[#e7f4f3] flex flex-col px-8 pt-20 pb-10 font-sans">
+    <button @click="router.back()" class="w-10 h-10 rounded-xl bg-white flex items-center justify-center mb-10 border border-white shadow-sm active:scale-95 transition-all group">
+      <span class="text-xl font-bold text-[#228085]">←</span>
     </button>
 
-    <div class="mb-12">
-      <h2 class="text-3xl font-bold text-gray-900 mb-2">Verify OTP</h2>
-      <p class="text-gray-500 font-medium">เราได้ส่งรหัส 6 หลักไปที่เบอร์ <span class="text-primary-main font-bold">+66 {{ phone }}</span></p>
+    <div class="mb-14">
+      <h2 class="text-[32px] font-bold text-[#1a1a1a] mb-1.5 tracking-tight">Verify OTP</h2>
+      <p class="text-[#7a869a] font-medium text-[17px]"> เราได้ส่งรหัส 6 หลักไปที่เบอร์ <span class="text-[#228085] font-semibold">+66 {{ phone }}</span></p>
     </div>
 
-    <div class="flex-1 space-y-10">
-      <div class="flex justify-between gap-2">
+    <div class="flex-1 space-y-12">
+      <div class="flex justify-between gap-2.5">
         <input 
-          v-for="(_digit, i) in otp" 
-          :key="i"
-          :id="`otp-${i}`"
-          v-model="otp[i]"
-          type="number"
-          maxlength="1"
+          v-for="(_digit, i) in otp" :key="i" :id="`otp-${i}`"
+          v-model="otp[i]" type="number" maxlength="1"
           @input="handleInput(i, $event)"
-          class="w-full aspect-square text-center text-2xl font-black bg-gray-50 border-2 border-transparent focus:border-primary-main focus:bg-white rounded-2xl outline-none transition-all shadow-sm no-spinner"
+          class="w-full aspect-square text-center text-3xl font-bold bg-white border-2 border-transparent focus:border-[#228085] focus:shadow-lg focus:shadow-teal-500/10 rounded-[18px] outline-none transition-all shadow-sm no-spinner"
         />
       </div>
 
-      <div class="text-center space-y-2">
-        <p class="text-sm font-medium text-gray-500">รหัสจะหมดอายุใน</p>
-        <p class="text-2xl font-black text-primary-dark tracking-tighter">{{ formatTime(timer) }}</p>
+      <div class="text-center space-y-3">
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest">Expires in</p>
+        <p class="text-3xl font-bold text-[#1a1a1a] tracking-tight">{{ formatTime(timer) }}</p>
       </div>
 
       <button 
         @click="handleVerify"
         :disabled="otp.join('').length < 6"
-        class="w-full py-4 rounded-2xl bg-primary-main text-white font-black text-lg shadow-lg shadow-primary-main/30 active:scale-95 disabled:grayscale disabled:opacity-50 transition-all duration-200"
+        class="w-full py-4.5 rounded-[18px] bg-[#228085] text-white font-semibold text-lg shadow-lg shadow-teal-500/20 active:scale-95 disabled:bg-[#bfc5c5] disabled:shadow-none transition-all pointer-events-auto"
       >
         Verify Now
       </button>
     </div>
 
     <div class="text-center mt-auto pt-10">
-      <button class="text-gray-400 font-bold hover:text-primary-main transition-colors">ส่งรหัสอีกครั้ง (Resend OTP)</button>
+      <button class="text-[#228085] font-semibold hover:underline underline-offset-4 decoration-2 text-sm">Resend OTP Code</button>
     </div>
   </div>
 </template>
 
 <style scoped>
-.no-spinner::-webkit-inner-spin-button,
-.no-spinner::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+.py-4\.5 { padding-top: 1.125rem; padding-bottom: 1.125rem; }
+.no-spinner::-webkit-inner-spin-button, .no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none; margin: 0;
 }
 </style>

@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
+import RegisterStep1View from '../views/RegisterStep1View.vue'
+import RegisterView from '../views/RegisterView.vue'
 import BranchView from '../views/BranchView.vue'
 import MenuView from '../views/MenuView.vue'
 import CheckoutView from '../views/CheckoutView.vue'
@@ -10,6 +12,7 @@ import SuccessView from '../views/SuccessView.vue'
 import OTPView from '../views/OTPView.vue'
 import OrdersView from '../views/OrdersView.vue'
 import MenuItemDetailView from '../views/MenuItemDetailView.vue'
+import ProfileView from '../views/ProfileView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,9 +28,24 @@ const router = createRouter({
       component: OrdersView
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: ProfileView
+    },
+    {
       path: '/',
       name: 'login',
       component: LoginView
+    },
+    {
+      path: '/register-step1',
+      name: 'register-step1',
+      component: RegisterStep1View
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView
     },
     {
       path: '/otp',

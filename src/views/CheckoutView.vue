@@ -1,191 +1,282 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const branchType = ref(localStorage.getItem('selectedBranch') || 'Room Service')
-const deliveryOption = ref(branchType.value === 'Room Service' ? 'delivery' : 'delivery') // delivery | store
+const deliveryOption = ref(branchType.value === 'Room Service' ? 'delivery' : 'store')
 const putInBox = ref(false)
 const orderNote = ref('')
+const pickupMode = ref('') // 'dine-in' | 'takeaway'
+const roomNumber = ref('')
+const hnNumber = ref('')
 
 const getCurrentTimePlusTwoHours = () => {
   const now = new Date()
   now.setHours(now.getHours() + 2)
-  return `${now.getHours().toString().padStart(2, '0')}:${(Math.ceil(now.getMinutes() / 30) * 30 % 60).toString().padStart(2, '0')}`
+  const m = now.getMinutes() < 30 ? 0 : 30
+  return `${now.getHours().toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`
 }
 
-const pickupTimeOption = ref('now') // now | schedule
+const pickupTimeOption = ref('now')
 const scheduleTime = ref(branchType.value === 'Room Service' ? getCurrentTimePlusTwoHours() : '12:00')
 
-const timeSlots = Array.from({ length: 48 }, (_, i) => {
-  const h = Math.floor(i / 2).toString().padStart(2, '0')
-  const m = (i % 2 === 1 ? '30' : '00')
-  return `${h}:${m}`
-})
+// --- Custom Time Picker ---
+const pickerHour = ref(6)
+const pickerMinute = ref(0)
+const pickerAmPm = ref('PM')
+const showPicker = ref(false)
 
-// สำหรับ Room Service: แสดงเฉพาะเวลาที่ >= เวลาปัจจุบัน + 2 ชั่วโมง
-const roomServiceTimeSlots = computed(() => {
-  const now = new Date()
-  now.setHours(now.getHours() + 2)
-  const minTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
-  return timeSlots.filter(t => t >= minTime)
-})
-
-watch([putInBox], () => {
-  let notes = []
-  if (putInBox.value) notes.push('ใส่กล่อง')
-  orderNote.value = notes.join(', ')
-})
-
-const setShortNote = (text: string) => {
-  if (!orderNote.value.includes(text)) {
-    orderNote.value = orderNote.value ? `${orderNote.value}, ${text}` : text
-  }
+const initPickerFromSchedule = () => {
+  const [h24, m] = scheduleTime.value.split(':').map(Number)
+  pickerAmPm.value = h24 >= 12 ? 'PM' : 'AM'
+  pickerHour.value = h24 % 12 || 12
+  pickerMinute.value = m
 }
 
+const updateScheduleFromPicker = () => {
+  let h = pickerHour.value
+  if (pickerAmPm.value === 'PM' && h !== 12) h += 12
+  if (pickerAmPm.value === 'AM' && h === 12) h = 0
+  scheduleTime.value = `${h.toString().padStart(2, '0')}:${pickerMinute.value.toString().padStart(2, '0')}`
+}
+
+const incHour = () => { pickerHour.value = (pickerHour.value % 12) + 1; updateScheduleFromPicker() }
+const decHour = () => { pickerHour.value = ((pickerHour.value - 2 + 12) % 12) + 1; updateScheduleFromPicker() }
+const incMin = () => { pickerMinute.value = pickerMinute.value === 0 ? 30 : 0; updateScheduleFromPicker() }
+const decMin = () => { pickerMinute.value = pickerMinute.value === 30 ? 0 : 30; updateScheduleFromPicker() }
+const toggleAmPm = (val: string) => { pickerAmPm.value = val; updateScheduleFromPicker() }
+
+const pickerDisplayTime = computed(() =>
+  `${pickerHour.value} : ${pickerMinute.value.toString().padStart(2, '0')}  ${pickerAmPm.value}`
+)
+
+watch(pickupTimeOption, (val) => {
+  if (val === 'schedule') {
+    initPickerFromSchedule()
+    showPicker.value = true
+  } else {
+    showPicker.value = false
+  }
+})
+
+onMounted(() => {
+  initPickerFromSchedule()
+  
+  // Restore from localStorage if exists
+  const savedDelivery = localStorage.getItem('deliveryOption')
+  if (savedDelivery) deliveryOption.value = savedDelivery
+  
+  roomNumber.value = localStorage.getItem('roomNumber') || ''
+  hnNumber.value = localStorage.getItem('hnNumber') || ''
+  orderNote.value = localStorage.getItem('orderNote') || ''
+  pickupMode.value = localStorage.getItem('pickupMode') || ''
+  
+  const savedPutInBox = localStorage.getItem('putInBox')
+  if (savedPutInBox) putInBox.value = savedPutInBox === 'true'
+})
+// --- End Time Picker ---
+
+const canProceed = computed(() => {
+  if (deliveryOption.value === 'store' && !pickupMode.value) return false
+  return true
+})
+
 const goNext = () => {
+  if (!canProceed.value) return
   localStorage.setItem('deliveryOption', deliveryOption.value)
   localStorage.setItem('putInBox', putInBox.value.toString())
   localStorage.setItem('orderNote', orderNote.value)
+  localStorage.setItem('pickupMode', pickupMode.value)
+  localStorage.setItem('roomNumber', roomNumber.value)
+  localStorage.setItem('hnNumber', hnNumber.value)
   localStorage.setItem('pickupTime', pickupTimeOption.value === 'now' ? 'ทันที' : scheduleTime.value)
   router.push({ name: 'cart' })
 }
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#f4fafa] font-sans pb-32">
-    <!-- Header (No separating border from background to match image) -->
-    <div class="px-6 py-5 flex items-center sticky top-0 z-30 bg-[#f4fafa]">
-      <button @click="router.back()" class="mr-4 text-xl text-gray-800">
-         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+  <div class="min-h-screen bg-[#f4fafa] font-sans pb-28">
+    <!-- Header -->
+    <div class="px-5 py-4 flex items-center sticky top-0 z-30 bg-[#f4fafa]">
+      <button @click="router.back()" class="mr-3 text-gray-500 hover:text-gray-800 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
       </button>
-      <h1 class="text-[17px] font-medium text-gray-900 leading-none mt-0.5">ข้อมูลที่อยู่จัดส่ง</h1>
+      <h1 class="text-[17px] font-bold text-gray-900 tracking-tight">ข้อมูลที่อยู่จัดส่ง</h1>
     </div>
 
-    <div class="p-4 space-y-4">
-      <!-- Contact Info Card -->
-      <div class="bg-white rounded-[1rem] p-4 shadow-sm space-y-3">
-        <h3 class="text-sm font-bold text-gray-900">ข้อมูลติดต่อ<span class="text-red-500">*</span></h3>
-        <input type="text" value="นวิยา อินทรประสิทธิ์" class="w-full bg-white border border-gray-300 rounded-[0.6rem] py-3 px-4 font-medium text-gray-500 text-[15px] outline-none shadow-sm" />
-        <input type="text" value="0800987465" class="w-full bg-white border border-gray-300 rounded-[0.6rem] py-3 px-4 font-medium text-gray-500 text-[15px] outline-none shadow-sm" />
+    <div class="px-4 space-y-4 text-[#2d3748]">
+      <!-- Contact Info -->
+      <div class="bg-white rounded-3xl p-5 shadow-sm space-y-3.5">
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-400">ข้อมูลติดต่อ<span class="text-red-500 ml-1">*</span></h3>
+        <div class="space-y-2.5">
+          <input type="text" value="นวิยา อินทรประสิทธิ์" class="w-full bg-gray-50/50 border border-gray-100 rounded-2xl py-3.5 px-4 font-semibold text-gray-500 text-[15px] outline-none" readonly />
+          <input type="text" value="0800987465" class="w-full bg-gray-50/50 border border-gray-100 rounded-2xl py-3.5 px-4 font-semibold text-gray-500 text-[15px] outline-none" readonly />
+        </div>
       </div>
 
-      <!-- Location Info Card -->
-      <div class="bg-white rounded-[1rem] p-4 shadow-sm space-y-3">
-        <h3 class="text-sm font-bold text-gray-900 pb-1 border-b border-gray-100">สถานที่จัดส่ง<span class="text-red-500">*</span></h3>
-        
+      <!-- Location -->
+      <div class="bg-white rounded-3xl p-5 shadow-sm space-y-4">
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-400 pb-2 border-b border-gray-50">สถานที่จัดส่ง<span class="text-red-500 ml-1">*</span></h3>
+
         <!-- Delivery Option -->
-        <div class="space-y-4 pt-1">
+        <div class="space-y-4">
           <label class="flex items-center gap-3 cursor-pointer group">
-            <div class="w-[22px] h-[22px] rounded-full border-[2.5px] flex items-center justify-center transition-all bg-white" :class="deliveryOption === 'delivery' ? 'border-[#228085]' : 'border-gray-300'">
-               <div v-if="deliveryOption === 'delivery'" class="w-3 h-3 bg-[#228085] rounded-full"></div>
+            <div class="w-[20px] h-[20px] rounded-full border-2 flex items-center justify-center transition-all p-[2.5px]" :class="deliveryOption === 'delivery' ? 'border-[#228085]' : 'border-gray-200'">
+              <div v-if="deliveryOption === 'delivery'" class="w-full h-full bg-[#228085] rounded-full border-2 border-white"></div>
             </div>
             <input type="radio" value="delivery" v-model="deliveryOption" class="hidden" />
-            <span class="font-medium text-[#2d3748] text-[15px]">บริการจัดส่ง</span>
+            <span class="font-bold text-[16px]">บริการจัดส่ง</span>
           </label>
-          
-          <div v-if="deliveryOption === 'delivery'" class="pl-8 space-y-3">
-            <input type="text" placeholder="กรอกเลขห้อง*" class="w-full bg-white border border-gray-300 rounded-[0.6rem] py-3.5 px-4 font-medium text-[15px] outline-none shadow-sm placeholder:text-gray-400" />
-            <input type="text" placeholder="กรอกเลข HN*" class="w-full bg-white border border-gray-300 rounded-[0.6rem] py-3.5 px-4 font-medium text-[15px] outline-none shadow-sm placeholder:text-gray-400" />
-            <label class="flex items-center gap-2 text-[#4a5568] font-medium cursor-pointer text-[15px] pt-1">
-              <input type="checkbox" v-model="putInBox" class="w-[18px] h-[18px] border-gray-300 rounded-[0.2rem] text-[#228085] focus:ring-0 checked:bg-[#228085] accent-[#228085]" />
+
+          <div v-if="deliveryOption === 'delivery'" class="pl-8 space-y-3 animate-slide-down">
+            <input type="text" v-model="roomNumber" placeholder="กรอกเลขห้อง*" class="w-full bg-white border border-gray-200 rounded-2xl py-3 px-4 text-sm font-semibold outline-none placeholder:text-gray-300 focus:border-[#228085]" />
+            <input type="text" v-model="hnNumber" placeholder="กรอกเลข HN*" class="w-full bg-white border border-gray-200 rounded-2xl py-3 px-4 text-sm font-semibold outline-none placeholder:text-gray-300 focus:border-[#228085]" />
+            <label class="flex items-center gap-2.5 text-gray-700 font-semibold cursor-pointer text-[14px] pt-1 select-none">
+              <input type="checkbox" v-model="putInBox" class="w-5 h-5 rounded-lg border-2 border-gray-200 accent-[#228085]" />
               ใส่กล่อง
             </label>
+
+            <!-- Room Service Timing -->
+            <div v-if="branchType === 'Room Service'" class="pt-3 space-y-4 border-t border-gray-50 mt-1">
+               <p class="text-[11px] text-[#228085] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                 📍 Room Service: จัดส่งถึงห้องเท่านั้น
+               </p>
+               
+               <div class="space-y-3.5">
+                 <label class="flex items-center gap-3 cursor-pointer group select-none">
+                   <div class="w-4 h-4 rounded-full flex items-center justify-center bg-gray-100 group-hover:bg-gray-200 transition-all">
+                     <div v-if="pickupTimeOption === 'now'" class="w-full h-full bg-[#228085] rounded-full scale-75"></div>
+                   </div>
+                   <input type="radio" value="now" v-model="pickupTimeOption" class="hidden" />
+                   <span class="text-[14px] font-semibold">รับทันที</span>
+                 </label>
+                 <label class="flex items-center gap-3 cursor-pointer group select-none">
+                   <div class="w-4 h-4 rounded-full flex items-center justify-center bg-gray-100 group-hover:bg-gray-200 transition-all">
+                     <div v-if="pickupTimeOption === 'schedule'" class="w-full h-full bg-[#228085] rounded-full scale-75"></div>
+                   </div>
+                   <input type="radio" value="schedule" v-model="pickupTimeOption" class="hidden" />
+                   <span class="text-[14px] font-semibold">ระบุเวลา <span class="text-xs text-gray-400 font-normal">(ขั้นต่ำ 2 ชม.)</span></span>
+                 </label>
+               </div>
+            </div>
           </div>
         </div>
 
-        <!-- Store Pickup Option (Hide if Room Service) -->
-        <div v-if="branchType !== 'Room Service'" class="pt-1">
+        <!-- Store Pickup Option -->
+        <div v-if="branchType !== 'Room Service'" class="pt-1 border-t border-gray-50 mt-2 pt-4">
           <label class="flex items-center gap-3 cursor-pointer group">
-            <div class="w-[22px] h-[22px] rounded-full border-[2.5px] flex items-center justify-center transition-all bg-white" :class="deliveryOption === 'store' ? 'border-[#228085]' : 'border-gray-300'">
-               <div v-if="deliveryOption === 'store'" class="w-3 h-3 bg-[#228085] rounded-full"></div>
+            <div class="w-[20px] h-[20px] rounded-full border-2 flex items-center justify-center transition-all p-[2.5px]" :class="deliveryOption === 'store' ? 'border-[#228085]' : 'border-gray-200'">
+              <div v-if="deliveryOption === 'store'" class="w-full h-full bg-[#228085] rounded-full border-2 border-white"></div>
             </div>
             <input type="radio" value="store" v-model="deliveryOption" class="hidden" />
-            <span class="font-medium text-[#2d3748] text-[15px]">รับที่ร้าน (Pickup)</span>
+            <span class="font-bold text-[16px]">รับที่ร้าน (Pickup)</span>
           </label>
-          
-          <!-- Pickup Time Options (Only for Store Pickup) -->
-          <div v-if="deliveryOption === 'store'" class="pl-8 pt-4 space-y-4">
-             <div class="flex flex-col gap-3">
-                <label class="flex items-center gap-3 cursor-pointer">
-                  <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all" :class="pickupTimeOption === 'now' ? 'border-[#228085]' : 'border-gray-300'">
-                    <div v-if="pickupTimeOption === 'now'" class="w-2.5 h-2.5 bg-[#228085] rounded-full"></div>
-                  </div>
-                  <input type="radio" value="now" v-model="pickupTimeOption" class="hidden" />
-                  <span class="text-sm font-medium text-gray-700">รับทันที</span>
-                </label>
 
-                <div class="flex items-center justify-between">
-                  <label class="flex items-center gap-3 cursor-pointer">
-                    <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all" :class="pickupTimeOption === 'schedule' ? 'border-[#228085]' : 'border-gray-300'">
-                      <div v-if="pickupTimeOption === 'schedule'" class="w-2.5 h-2.5 bg-[#228085] rounded-full"></div>
-                    </div>
-                    <input type="radio" value="schedule" v-model="pickupTimeOption" class="hidden" />
-                    <span class="text-sm font-medium text-gray-700">ระบุเวลา</span>
-                  </label>
-                  
-                  <select v-if="pickupTimeOption === 'schedule'" v-model="scheduleTime" class="bg-gray-50 border border-gray-200 rounded-lg py-1.5 px-3 text-sm outline-none focus:border-[#228085]">
-                    <option v-for="t in timeSlots" :key="t" :value="t">{{ t }}</option>
-                  </select>
-                </div>
+          <div v-if="deliveryOption === 'store'" class="pl-8 pt-4 space-y-4 animate-slide-down">
+             <!-- Required Selection -->
+             <div class="flex gap-2">
+                <button 
+                  @click="pickupMode = 'dine-in'" 
+                  :class="pickupMode === 'dine-in' ? 'bg-[#228085] text-white shadow-md' : 'bg-gray-50 text-gray-500 border border-transparent'"
+                  class="flex-1 py-3 rounded-2xl font-semibold text-sm transition-all"
+                >ทานที่ร้าน</button>
+                <button 
+                  @click="pickupMode = 'takeaway'" 
+                  :class="pickupMode === 'takeaway' ? 'bg-[#228085] text-white shadow-md' : 'bg-gray-50 text-gray-500 border border-transparent'"
+                  class="flex-1 py-3 rounded-2xl font-semibold text-sm transition-all"
+                >รับกลับบ้าน</button>
+             </div>
+
+             <div class="space-y-4 pt-2">
+               <label class="flex items-center gap-3 cursor-pointer group select-none">
+                 <div class="w-4 h-4 rounded-full flex items-center justify-center bg-gray-100 group-hover:bg-gray-200 transition-all">
+                   <div v-if="pickupTimeOption === 'now'" class="w-full h-full bg-[#228085] rounded-full scale-75"></div>
+                 </div>
+                 <input type="radio" value="now" v-model="pickupTimeOption" class="hidden" />
+                 <span class="text-[14px] font-semibold">รับทันที</span>
+               </label>
+               <label class="flex items-center gap-3 cursor-pointer group select-none">
+                 <div class="w-4 h-4 rounded-full flex items-center justify-center bg-gray-100 group-hover:bg-gray-200 transition-all">
+                   <div v-if="pickupTimeOption === 'schedule'" class="w-full h-full bg-[#228085] rounded-full scale-75"></div>
+                 </div>
+                 <input type="radio" value="schedule" v-model="pickupTimeOption" class="hidden" />
+                 <span class="text-[14px] font-semibold">ระบุเวลา <span class="text-xs text-gray-400 font-normal">(ขั้นต่ำ 2 ชม.)</span></span>
+               </label>
              </div>
           </div>
         </div>
 
-        <!-- Room Service: รับทันที / ระบุเวลา -->
-        <div v-if="branchType === 'Room Service'" class="mt-1 space-y-2.5">
-          <p class="text-[12px] text-[#228085] font-medium">📍 Room Service: จัดส่งถึงห้องพักเท่านั้น</p>
+        <!-- Time Picker Display -->
+        <div v-if="pickupTimeOption === 'schedule'" class="mt-3 bg-white border border-gray-50 rounded-3xl overflow-hidden shadow-xl shadow-teal-900/5 animate-fade-in mx-1">
+          <div class="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors" @click="showPicker = !showPicker">
+            <span class="text-[16px] font-bold text-gray-800 tracking-tight">{{ pickerDisplayTime }}</span>
+            <svg class="w-5 h-5 text-[#228085]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
 
-          <!-- รับทันที -->
-          <label class="flex items-center gap-3 cursor-pointer">
-            <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all" :class="pickupTimeOption === 'now' ? 'border-[#228085]' : 'border-gray-300'">
-              <div v-if="pickupTimeOption === 'now'" class="w-2.5 h-2.5 bg-[#228085] rounded-full"></div>
-            </div>
-            <input type="radio" value="now" v-model="pickupTimeOption" class="hidden" />
-            <span class="text-sm font-medium text-gray-700">รับทันที</span>
-          </label>
-
-          <!-- ระบุเวลา -->
-          <div class="flex items-center justify-between">
-            <label class="flex items-center gap-3 cursor-pointer">
-              <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all" :class="pickupTimeOption === 'schedule' ? 'border-[#228085]' : 'border-gray-300'">
-                <div v-if="pickupTimeOption === 'schedule'" class="w-2.5 h-2.5 bg-[#228085] rounded-full"></div>
+          <div v-if="showPicker" class="p-6 bg-gray-50/30 border-t border-gray-50">
+            <div class="flex items-center justify-center gap-8">
+              <div class="flex flex-col items-center gap-1">
+                <button @click="incHour" class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-300 hover:text-[#228085] active:scale-90 transition-all">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 15l7-7 7 7"/></svg>
+                </button>
+                <span class="text-5xl font-bold text-gray-800 w-16 text-center tabular-nums">{{ pickerHour }}</span>
+                <button @click="decHour" class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-300 hover:text-[#228085] active:scale-90 transition-all">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/></svg>
+                </button>
               </div>
-              <input type="radio" value="schedule" v-model="pickupTimeOption" class="hidden" />
-              <span class="text-sm font-medium text-gray-700">ระบุเวลา <span class="text-xs text-gray-400">(ขั้นต่ำ 2 ชั่วโมง)</span></span>
-            </label>
-            <select v-if="pickupTimeOption === 'schedule'" v-model="scheduleTime" class="bg-gray-50 border border-gray-200 rounded-lg py-1.5 px-3 text-sm outline-none focus:border-[#228085]">
-              <option v-for="t in roomServiceTimeSlots" :key="t" :value="t">{{ t }}</option>
-            </select>
+
+              <span class="text-5xl font-medium text-gray-200 pb-3 leading-none">:</span>
+
+              <div class="flex flex-col items-center gap-1">
+                <button @click="incMin" class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-300 hover:text-[#228085] active:scale-90 transition-all">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 15l7-7 7 7"/></svg>
+                </button>
+                <span class="text-5xl font-bold text-gray-800 w-16 text-center tabular-nums">{{ pickerMinute.toString().padStart(2,'0') }}</span>
+                <button @click="decMin" class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-300 hover:text-[#228085] active:scale-90 transition-all">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex mt-6 rounded-[20px] overflow-hidden border border-gray-100 bg-white p-1 shadow-inner">
+              <button @click="toggleAmPm('AM')" :class="pickerAmPm === 'AM' ? 'bg-[#228085] text-white shadow-md' : 'text-gray-400 hover:bg-gray-50'" class="flex-1 py-3 text-sm font-semibold transition-all rounded-[16px]">AM</button>
+              <button @click="toggleAmPm('PM')" :class="pickerAmPm === 'PM' ? 'bg-[#228085] text-white shadow-md' : 'text-gray-400 hover:bg-gray-50'" class="flex-1 py-3 text-sm font-semibold transition-all rounded-[16px]">PM</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Note Card -->
-      <div class="bg-white rounded-[1rem] p-4 shadow-sm space-y-3">
-        <h3 class="text-sm font-bold text-gray-900">หมายเหตุการสั่ง</h3>
-        
-        <!-- Short-cut Buttons (Only for Store Pickup) -->
-        <div v-if="deliveryOption === 'store'" class="flex gap-3 mb-2">
-          <button 
-            @click="setShortNote('ทานที่ร้าน')"
-            class="flex-1 py-2.5 rounded-xl border-[1.5px] border-gray-200 text-gray-500 font-bold text-sm hover:border-[#228085] hover:text-[#228085] active:bg-[#228085] active:text-white transition-all outline-none"
-          >ทานที่ร้าน</button>
-          <button 
-            @click="setShortNote('รับกลับบ้าน')"
-            class="flex-1 py-2.5 rounded-xl border-[1.5px] border-gray-200 text-gray-500 font-bold text-sm hover:border-[#228085] hover:text-[#228085] active:bg-[#228085] active:text-white transition-all outline-none"
-          >รับกลับบ้าน</button>
-        </div>
-
-        <textarea v-model="orderNote" placeholder="เพิ่มคำแนะนำพิเศษ..." class="w-full min-h-[80px] bg-white border border-gray-300 rounded-[0.6rem] py-3 px-4 font-medium text-gray-600 outline-none shadow-sm text-[15px] placeholder:text-gray-400"></textarea>
+      <!-- Note -->
+      <div class="bg-white rounded-3xl p-5 shadow-sm space-y-3.5">
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-400">หมายเหตุการสั่ง</h3>
+        <textarea v-model="orderNote" placeholder="เพิ่มคำแนะนำพิเศษ เช่น ไม่เผ็ด, เผ็ดน้อย..." class="w-full min-h-[80px] bg-gray-50 border border-gray-100 rounded-2xl py-3 px-4 text-[15px] font-medium text-gray-700 outline-none placeholder:text-gray-300 focus:border-[#228085] transition-all"></textarea>
       </div>
 
       <!-- Action -->
       <div class="pt-2">
-        <button @click="goNext" class="w-full py-3.5 rounded-[0.8rem] bg-[#228085] text-white font-medium text-base shadow-sm active:scale-[0.98] transition-all">
-          ถัดไป
+        <button 
+          @click="goNext" 
+          :disabled="!canProceed"
+          class="w-full py-4.5 rounded-[22px] font-bold text-lg shadow-xl shadow-teal-500/10 active:scale-[0.98] transition-all"
+          :class="canProceed 
+            ? 'bg-[#228085] text-white' 
+            : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'"
+        >
+          ดำเนินการสรุปรายการ
         </button>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.py-4\.5 { padding-top: 1.125rem; padding-bottom: 1.125rem; }
+.animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+.animate-slide-down { animation: slideDown 0.3s ease-out forwards; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideDown { 
+  from { opacity: 0; transform: translateY(-10px); } 
+  to { opacity: 1; transform: translateY(0); } 
+}
+</style>

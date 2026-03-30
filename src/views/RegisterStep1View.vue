@@ -6,26 +6,17 @@ const router = useRouter()
 const phoneOrEmail = ref('')
 const lang = ref(localStorage.getItem('user_lang') || 'EN')
 
-const setLang = (val: string) => {
-  lang.value = val
-  localStorage.setItem('user_lang', val)
-}
-
 const handleSendOTP = () => {
   if (phoneOrEmail.value) {
-    router.push({ name: 'otp', query: { phone: phoneOrEmail.value } })
+    router.push({ name: 'otp', query: { phone: phoneOrEmail.value, mode: 'register' } })
   }
 }
 
-const goToRegisterInput = () => {
-  router.push({ name: 'register-step1' })
-}
-
 const t = {
-  signIn: { EN: 'Sign In', TH: 'ลงชื่อเข้าใช้' },
-  sendOtp: { EN: 'Send OTP', TH: 'ส่งรหัส OTP' },
-  notHaveAccount: { EN: "Don't have an account yet? Register", TH: "ยังไม่มีบัญชี? สมัครสมาชิก" },
-  placeholder: { EN: 'Enter phone or email', TH: 'กรอกเบอร์โทรหรืออีเมล' }
+  register: { EN: 'Register', TH: 'สมัครสมาชิก' },
+  subTitle: { EN: 'Fill in information to use the system', TH: 'กรอกข้อมูลเพื่อเริ่มต้นใช้งานระบบ' },
+  sendOtp: { EN: 'Sent OTP', TH: 'ส่งรหัส OTP' },
+  alreadyHaveAccount: { EN: 'Already have an account? Sign in', TH: 'มีบัญชีอยู่แล้ว? เข้าสู่ระบบ' }
 }
 </script>
 
@@ -41,14 +32,14 @@ const t = {
       <!-- Lang Toggle (Teal theme) -->
       <div class="bg-[#eff8f8]/80 p-1 rounded-full flex gap-1 shadow-sm border border-white/50">
         <button 
-          @click="setLang('EN')"
+          @click="lang = 'EN'"
           :class="lang === 'EN' ? 'bg-[#228085] text-white shadow-sm' : 'text-gray-400'"
           class="px-4 py-1.5 rounded-full text-xs font-semibold transition-all"
         >
           EN
         </button>
         <button 
-          @click="setLang('TH')"
+          @click="lang = 'TH'"
           :class="lang === 'TH' ? 'bg-[#228085] text-white shadow-sm' : 'text-gray-400'"
           class="px-4 py-1.5 rounded-full text-xs font-semibold transition-all"
         >
@@ -57,20 +48,20 @@ const t = {
       </div>
     </div>
 
-    <!-- Sign In Titles -->
-    <div class="w-full max-w-sm mb-12">
-      <h1 class="text-[32px] font-bold text-[#1a1a1a] mb-1.5 tracking-tight">{{ t.signIn[lang] }}</h1>
-      <p class="text-[#7a869a] font-medium text-lg leading-tight">Phone / Email</p>
+    <!-- Titles -->
+    <div class="w-full max-w-sm mb-12 text-left">
+      <h1 class="text-[32px] font-bold text-[#1a1a1a] mb-1.5 tracking-tight">{{ t.register[lang] }}</h1>
+      <p class="text-[#7a869a] font-medium text-lg leading-tight">{{ t.subTitle[lang] }}</p>
     </div>
 
     <!-- Form -->
     <div class="w-full max-w-sm space-y-10">
       <div class="space-y-3">
-        <label class="text-[14px] font-semibold text-[#1a1a1a] block ml-1">Phone / Email</label>
+        <label class="text-[14px] font-semibold text-[#1a1a1a] block ml-1 uppercase tracking-wider">Phone / Email</label>
         <input 
           v-model="phoneOrEmail"
           type="text" 
-          :placeholder="t.placeholder[lang]"
+          placeholder="Enter phone or email"
           class="w-full bg-white border-none focus:ring-2 focus:ring-[#228085]/50 rounded-[18px] py-4.5 px-6 text-gray-700 font-medium outline-none transition-all placeholder:text-gray-300 shadow-sm text-[16px]"
         />
       </div>
@@ -85,10 +76,10 @@ const t = {
 
       <div class="text-center pt-2">
         <button 
-          @click="goToRegisterInput"
+          @click="router.push({ name: 'login' })"
           class="text-[#228085] font-semibold hover:underline text-sm underline-offset-4 decoration-2"
         >
-          {{ t.notHaveAccount[lang] }}
+          {{ t.alreadyHaveAccount[lang] }}
         </button>
       </div>
     </div>
