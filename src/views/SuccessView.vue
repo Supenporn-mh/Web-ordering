@@ -188,8 +188,8 @@ const formattedDate = computed(() => {
 
       <!-- Action Buttons -->
       <div class="space-y-4 pt-4 px-1 pb-14">
-        <button @click="router.push({ name: 'orders' })" class="w-full py-5 rounded-[24px] bg-[#228085] text-white font-bold text-[18px] shadow-lg shadow-teal-500/10 active:scale-95 transition-all">View Orders</button>
-        <button @click="router.push({ name: 'menu' })" class="w-full py-5 rounded-[24px] bg-[#e7f4f3] text-[#228085] font-bold text-[18px] active:scale-95 transition-all border border-teal-100/50">Back to Menu</button>
+        <button @click="router.push({ name: 'orders' })" class="w-full py-5 rounded-[24px] bg-[#228085] text-white font-bold text-[18px] active:scale-95 transition-all uppercase tracking-wide">View Orders</button>
+        <button @click="router.push({ name: 'menu' })" class="w-full py-5 rounded-[24px] bg-[#e7f4f3] text-[#228085] font-bold text-[18px] active:scale-95 transition-all uppercase tracking-wide">Back to Menu</button>
       </div>
     </div>
 

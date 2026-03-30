@@ -62,15 +62,14 @@ const handlePay = () => {
 <template>
   <div class="min-h-screen bg-[#f8fcfc] font-sans pb-40">
     <!-- Header -->
-    <div class="px-5 py-4 flex items-center bg-white border-b border-gray-50 sticky top-0 z-20 shadow-sm shadow-blue-900/5">
-      <button @click="router.back()" class="p-2 rounded-xl bg-gray-50 text-gray-900 active:scale-90 absolute left-5">
+    <div class="px-5 py-4 flex items-center bg-white border-b border-gray-50 sticky top-0 z-20">
+      <button @click="router.back()" class="p-2 rounded-xl text-gray-900 active:scale-90 absolute left-5">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
       </button>
       <h1 class="text-[18px] font-bold text-gray-800 mx-auto tracking-tight">สรุปคำสั่งซื้อ</h1>
     </div>
 
     <div class="p-4 space-y-4">
-      <!-- Delivery Info Box (Reverted to Original Style + Correct Data) -->
       <div class="bg-white rounded-[24px] p-6 shadow-sm border border-gray-50/50">
         <div class="flex items-start gap-4">
           <!-- Icon -->
@@ -107,15 +106,14 @@ const handlePay = () => {
           <!-- Instant Pay -->
           <button
             @click="payTiming = 'now'"
-            :class="payTiming === 'now' ? 'border-[#228085] bg-[#f0f9f9] ring-2 ring-teal-500/5' : 'border-gray-50 bg-white shadow-sm'"
-            class="rounded-[24px] border-2 p-6 text-left transition-all active:scale-95 flex flex-col items-start gap-4"
+            :class="payTiming === 'now' ? 'border-[#228085] bg-[#f0f9f9]' : 'border-gray-50 bg-white shadow-sm'"
+            class="rounded-[24px] border-2 p-6 text-left transition-all active:scale-95 flex flex-col items-start gap-1"
           >
-            <div class="text-3xl">⚡️</div>
             <div>
-              <p class="text-[18px] font-bold text-gray-900">ชำระทันที</p>
-              <p class="text-[14px] text-gray-400 mt-1 leading-snug">ชำระเงินทันทีผ่านช่องทางที่เลือก</p>
+              <p class="text-[18px] font-bold text-gray-900 leading-tight">ชำระทันที</p>
+              <p class="text-[14px] text-gray-400 mt-1 leading-snug">ชำระผ่านช่องทางที่เลือก</p>
             </div>
-            <div v-if="payTiming === 'now'" class="w-7 h-7 rounded-full bg-[#228085] flex items-center justify-center shadow-lg shadow-teal-500/20">
+            <div v-if="payTiming === 'now'" class="w-7 h-7 rounded-full bg-[#228085] flex items-center justify-center mt-2">
               <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"/></svg>
             </div>
           </button>
@@ -123,15 +121,14 @@ const handlePay = () => {
           <!-- Pay Later -->
           <button
             @click="payTiming = 'later'"
-            :class="payTiming === 'later' ? 'border-[#228085] bg-[#f0f9f9] ring-2 ring-teal-500/5' : 'border-gray-50 bg-white shadow-sm'"
-            class="rounded-[24px] border-2 p-6 text-left transition-all active:scale-95 flex flex-col items-start gap-4"
+            :class="payTiming === 'later' ? 'border-[#228085] bg-[#f0f9f9]' : 'border-gray-50 bg-white shadow-sm'"
+            class="rounded-[24px] border-2 p-6 text-left transition-all active:scale-95 flex flex-col items-start gap-1"
           >
-            <div class="text-3xl">🔘</div>
             <div>
-              <p class="text-[18px] font-bold text-gray-900">ชำระภายหลัง</p>
-              <p class="text-[14px] text-gray-400 mt-1 leading-snug">ชำระเงินเมื่อได้รับอาหาร</p>
+              <p class="text-[18px] font-bold text-gray-900 leading-tight">ชำระภายหลัง</p>
+              <p class="text-[14px] text-gray-400 mt-1 leading-snug">ชำระเมื่อได้รับอาหาร</p>
             </div>
-            <div v-if="payTiming === 'later'" class="w-7 h-7 rounded-full bg-[#228085] flex items-center justify-center shadow-lg shadow-teal-500/20">
+            <div v-if="payTiming === 'later'" class="w-7 h-7 rounded-full bg-[#228085] flex items-center justify-center mt-2">
               <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"/></svg>
             </div>
           </button>
