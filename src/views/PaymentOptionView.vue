@@ -79,14 +79,18 @@ const handlePay = () => {
           </div>
           <!-- Info -->
           <div class="flex-1 min-w-0">
-            <p class="text-[16px] font-bold text-gray-300 mb-1">{{ deliveryOption === 'delivery' ? 'จัดส่งไปที่' : 'ข้อมูลการรับอาหาร' }}</p>
+            <p class="text-[16px] font-bold text-gray-300 mb-1">{{ deliveryOption === 'delivery' ? 'จัดส่งไปที่' : 'ช่องทางการรับอาหาร' }}</p>
             <template v-if="deliveryOption === 'delivery'">
               <p class="text-[18px] font-bold text-gray-900 leading-tight">ห้องพัก {{ room }} — HN {{ hn }}</p>
             </template>
             <template v-else>
-              <p class="text-[18px] font-bold text-gray-900 leading-tight">รับกลับบ้าน / ทานที่ร้าน</p>
+              <p class="text-[18px] font-bold text-gray-900 leading-tight">รับอาหารด้วยตนเอง (Pickup)</p>
             </template>
-            <p class="text-[14px] text-gray-400 mt-2 font-medium">หมายเหตุ: {{ (deliveryOption === 'delivery' && putInBox === 'true' ? 'ใส่กล่อง, ' : '') + (orderNote || '-') }}</p>
+            <p class="text-[14px] text-gray-400 mt-2 font-medium">
+               หมายเหตุ: 
+               {{ deliveryOption === 'delivery' ? (putInBox === 'true' ? 'ใส่กล่อง' : 'ปกติ') : (pickupMode === 'dine-in' ? 'ทานที่ร้าน' : 'รับกลับบ้าน') }}
+               {{ orderNote ? ', ' + orderNote : '' }}
+            </p>
           </div>
           <!-- Time (Top Right) -->
           <div class="text-right shrink-0">
