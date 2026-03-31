@@ -107,7 +107,7 @@ const orders = ref<any[]>(mockOrders)
     </div>
 
     <!-- Orders List (Based on screenshot card design) -->
-    <div class="px-5 space-y-5">
+    <div class="px-5 pt-4 pb-10 space-y-5">
       <div v-if="orders.length === 0" class="flex flex-col items-center justify-center py-20 opacity-40">
         <p class="text-gray-500 font-bold text-[18px]">{{ t.noOrders }}</p>
       </div>

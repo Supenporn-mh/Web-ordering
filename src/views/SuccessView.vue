@@ -68,7 +68,7 @@ const formattedDate = computed(() => {
       <h1 class="text-[18px] font-bold text-gray-800 tracking-tight">E-Receipt</h1>
     </div>
 
-    <div class="p-4 space-y-4">
+    <div class="px-4 pt-6 pb-10 space-y-4">
       
       <!-- 1. Pending Status Card -->
       <div class="bg-[#fffcf0] rounded-[24px] p-8 text-center shadow-sm border border-yellow-100/50">

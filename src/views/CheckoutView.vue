@@ -105,7 +105,7 @@ const goNext = () => {
       <h1 class="text-[18px] font-bold text-gray-800 mx-auto tracking-tight">ข้อมูลที่อยู่จัดส่ง</h1>
     </div>
 
-    <div class="px-4 space-y-4 text-[#2d3748]">
+    <div class="px-4 pt-6 pb-10 space-y-4 text-[#2d3748]">
       <!-- Contact Info -->
       <div class="bg-white rounded-3xl p-5 shadow-sm space-y-4 border border-gray-200">
         <h3 class="text-sm font-bold uppercase tracking-wider text-gray-600">ข้อมูลติดต่อ<span class="text-red-500 ml-1">*</span></h3>

@@ -101,7 +101,7 @@ const t = computed(() => translations[currentLang.value])
       </div>
     </div>
 
-    <div class="px-5 space-y-6">
+    <div class="px-5 pt-4 pb-10 space-y-6">
       <!-- Profile Header Card (Standardized rounded-[24px]) -->
       <div class="bg-white rounded-[24px] p-8 shadow-sm border border-gray-200 flex flex-col items-center text-center">
         <!-- Avatar -->

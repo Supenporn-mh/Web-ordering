@@ -106,7 +106,7 @@ const handleConfirmOrder = () => {
       <h1 class="text-[18px] font-bold text-gray-800 mx-auto tracking-tight">รายการออเดอร์ที่สั่ง</h1>
     </div>
 
-    <div class="p-4 space-y-4">
+    <div class="px-4 pt-6 pb-10 space-y-4">
       <!-- Location Card (Uniform rounded-[24px]) -->
       <div class="bg-white rounded-[24px] p-5 shadow-sm border border-gray-200">
         <!-- Header Row -->
