@@ -4,7 +4,7 @@ const route = useRoute()
 </script>
 
 <template>
-  <div class="max-w-[400px] mx-auto bg-[#f8fcfc] min-h-screen relative overflow-x-hidden shadow-2xl shadow-black/10">
+  <div class="max-w-[390px] mx-auto bg-[#f8fcfc] min-h-screen relative overflow-x-hidden shadow-2xl shadow-black/10">
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
         <component :is="Component" :key="route?.path || 'app'" />
