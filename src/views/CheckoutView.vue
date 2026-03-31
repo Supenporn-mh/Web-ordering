@@ -164,7 +164,7 @@ const goNext = () => {
         </div>
 
         <!-- Store Pickup Option -->
-        <div v-if="branchType !== 'Room Service'" class="pt-1 border-t border-gray-200 mt-2">
+        <div v-if="branchType !== 'Room Service'" class="pt-1 mt-2">
           <label class="flex items-center gap-4 cursor-pointer group mt-4">
             <div class="w-[20px] h-[20px] rounded-full border-2 flex items-center justify-center transition-all p-[2.5px]" :class="deliveryOption === 'store' ? 'border-[#228085]' : 'border-gray-300'">
               <div v-if="deliveryOption === 'store'" class="w-full h-full bg-[#228085] rounded-full border-2 border-white"></div>
