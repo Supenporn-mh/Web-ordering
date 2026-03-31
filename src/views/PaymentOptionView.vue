@@ -62,7 +62,7 @@ const handlePay = () => {
 <template>
   <div class="min-h-screen bg-[#f8fcfc] font-sans pb-40">
     <!-- Header -->
-    <div class="px-5 py-4 flex items-center bg-white border-b border-gray-50 sticky top-0 z-20">
+    <div class="px-5 py-3 flex items-center bg-white border-b border-gray-200 sticky top-0 z-20 shadow-sm shadow-teal-900/5">
       <button @click="router.back()" class="p-2 rounded-xl text-gray-900 active:scale-90 absolute left-5">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
       </button>
@@ -70,7 +70,7 @@ const handlePay = () => {
     </div>
 
     <div class="p-4 space-y-4">
-      <div class="bg-white rounded-[24px] p-6 shadow-sm border border-gray-50/50">
+      <div class="bg-white rounded-[24px] p-5 shadow-sm border border-gray-200">
         <div class="flex items-start gap-4">
           <!-- Icon -->
           <div class="mt-1 text-red-500 shrink-0">
@@ -78,14 +78,14 @@ const handlePay = () => {
           </div>
           <!-- Info -->
           <div class="flex-1 min-w-0">
-            <p class="text-[16px] font-bold text-gray-300 mb-1">{{ deliveryOption === 'delivery' ? 'จัดส่งไปที่' : 'ช่องทางการรับอาหาร' }}</p>
+            <p class="text-[16px] font-bold text-gray-500 mb-1">{{ deliveryOption === 'delivery' ? 'จัดส่งไปที่' : 'ช่องทางการรับอาหาร' }}</p>
             <template v-if="deliveryOption === 'delivery'">
               <p class="text-[18px] font-bold text-gray-900 leading-tight">ห้องพัก {{ room }} — HN {{ hn }}</p>
             </template>
             <template v-else>
               <p class="text-[18px] font-bold text-gray-900 leading-tight">รับอาหารด้วยตนเอง (Pickup)</p>
             </template>
-            <p class="text-[14px] text-gray-400 mt-2 font-medium">
+            <p class="text-[14px] text-gray-600 mt-2 font-bold tracking-tight">
                หมายเหตุ: 
                {{ deliveryOption === 'delivery' ? (putInBox === 'true' ? 'ใส่กล่อง' : 'ปกติ') : (pickupMode === 'dine-in' ? 'ทานที่ร้าน' : 'รับกลับบ้าน') }}
                {{ orderNote ? ', ' + orderNote : '' }}
@@ -93,7 +93,7 @@ const handlePay = () => {
           </div>
           <!-- Time (Top Right) -->
           <div class="text-right shrink-0">
-            <p class="text-[14px] text-gray-300 font-bold uppercase tracking-wider">เวลา</p>
+            <p class="text-[14px] text-gray-500 font-bold uppercase tracking-wider">เวลา</p>
             <p class="text-[16px] font-bold text-[#228085]">{{ pickupTime }}</p>
           </div>
         </div>
@@ -136,11 +136,11 @@ const handlePay = () => {
       </div>
 
       <!-- Item Summary Card (Standardized rounded-[24px]) -->
-      <div class="bg-white rounded-[24px] p-7 shadow-sm border border-gray-50/50 space-y-6">
-        <h2 class="text-[16px] font-bold text-gray-400 mb-2">รายการออเดอร์</h2>
+      <div class="bg-white rounded-[24px] p-5 shadow-sm border border-gray-200">
+        <h2 class="text-[16px] font-bold text-gray-500 mb-4 border-b border-gray-200 pb-2">รายการออเดอร์</h2>
         
         <div class="space-y-4">
-          <div v-for="item in cartItems" :key="item.id" class="flex justify-between items-start pb-4 border-b border-gray-50 last:border-0 last:pb-0">
+          <div v-for="item in cartItems" :key="item.id" class="flex justify-between items-start pb-4 border-b border-gray-200 last:border-0 last:pb-0">
             <div class="flex-1 min-w-0">
                <p class="text-[16px] font-bold text-gray-800 leading-tight"><span class="text-[#228085]">{{ item.qty || item.quantity }}x</span> {{ item.name }}</p>
                <p v-if="item.desc || item.note" class="text-[13px] text-gray-400 mt-1.5 line-clamp-1">+ {{ item.desc || item.note }}</p>
@@ -149,21 +149,21 @@ const handlePay = () => {
           </div>
         </div>
 
-        <div class="pt-6 border-t-2 border-dashed border-gray-100 space-y-3">
-          <div class="flex justify-between items-center text-[16px] text-gray-400 font-medium">
+        <div class="pt-6 border-t-2 border-dashed border-gray-200 space-y-3">
+          <div class="flex justify-between items-center text-[16px] text-gray-600 font-medium tracking-tight">
              <span>ยอดรวม</span>
-             <span class="font-bold text-gray-800">฿{{ subtotal.toLocaleString() }}</span>
+             <span class="font-bold text-gray-900">฿{{ subtotal.toLocaleString() }}</span>
           </div>
-          <div v-if="discount > 0" class="flex justify-between items-center text-[16px] text-red-500 font-medium tracking-tight">
+          <div v-if="discount > 0" class="flex justify-between items-center text-[16px] text-red-500 font-bold tracking-tight">
              <span>ส่วนลด</span>
              <span class="font-bold">-฿{{ discount.toLocaleString() }}</span>
           </div>
-          <div class="flex justify-between items-center text-[16px] text-gray-400 font-medium pb-2">
+          <div class="flex justify-between items-center text-[16px] text-gray-600 font-medium pb-2 tracking-tight">
              <span>ภาษี (7%)</span>
-             <span class="font-bold text-gray-800">฿{{ tax.toLocaleString(undefined, { minimumFractionDigits: 2 }) }}</span>
+             <span class="font-bold text-gray-900">฿{{ tax.toLocaleString(undefined, { minimumFractionDigits: 2 }) }}</span>
           </div>
-          <div class="flex justify-between items-center pt-4 border-t border-gray-100">
-             <span class="text-[18px] font-bold text-gray-800">ยอดรวมสุทธิ</span>
+          <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+             <span class="text-[18px] font-bold text-gray-900">ยอดรวมสุทธิ</span>
              <span class="text-[24px] font-black text-[#228085]">฿{{ total.toLocaleString(undefined, { minimumFractionDigits: 2 }) }}</span>
           </div>
         </div>
@@ -171,7 +171,7 @@ const handlePay = () => {
     </div>
 
     <!-- Fixed Bottom Action (Standardized rounded-[24px]) -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 p-6 pb-10 z-30 shadow-[0_-8px_30px_rgba(0,0,0,0.05)]">
+    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[375px] bg-white/95 backdrop-blur-md border-t border-gray-200 p-6 pb-10 z-30 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]">
       <button
         @click="handlePay"
         :disabled="!canProceed"

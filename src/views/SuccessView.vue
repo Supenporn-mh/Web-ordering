@@ -64,7 +64,7 @@ const formattedDate = computed(() => {
 <template>
   <div class="min-h-screen bg-[#f8fcfc] font-sans pb-32">
     <!-- Header -->
-    <div class="px-5 py-5 flex items-center justify-center bg-white sticky top-0 z-20 shadow-sm border-b border-gray-50">
+    <div class="px-5 py-3 flex items-center justify-center bg-white sticky top-0 z-20 shadow-sm border-b border-gray-200">
       <h1 class="text-[18px] font-bold text-gray-800 tracking-tight">E-Receipt</h1>
     </div>
 
@@ -80,8 +80,8 @@ const formattedDate = computed(() => {
       </div>
 
       <!-- 2. Tracking Card -->
-      <div class="bg-white rounded-[24px] p-7 shadow-sm border border-gray-50/50">
-        <h3 class="text-[12px] font-bold text-gray-300 mb-8 text-center uppercase tracking-[0.2em]">สถานะคำสั่งซื้อ (TRACKING)</h3>
+      <div class="bg-white rounded-[24px] p-5 shadow-sm border border-gray-200">
+        <h3 class="text-[12px] font-bold text-gray-500 mb-6 text-center uppercase tracking-[0.2em]">สถานะคำสั่งซื้อ (TRACKING)</h3>
         
         <div class="flex items-center justify-between relative px-2">
           <div class="absolute top-[23px] left-8 right-8 h-1.5 bg-[#eff8f8] rounded-full">
@@ -100,57 +100,57 @@ const formattedDate = computed(() => {
                   <svg v-if="step.id === 4" class="w-full h-full text-[#228085]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
                 </div>
              </div>
-             <span class="text-[11px] font-bold uppercase tracking-wider transition-colors" :class="status >= step.id ? 'text-[#228085]' : 'text-gray-300'">{{ step.name }}</span>
+             <span class="text-[11px] font-bold uppercase tracking-wider transition-colors" :class="status >= step.id ? 'text-[#228085]' : 'text-gray-500'">{{ step.name }}</span>
           </div>
         </div>
       </div>
 
       <!-- 3. Details Card -->
-      <div class="bg-white rounded-[24px] px-7 py-4 shadow-sm border border-gray-50/50">
-        <div class="divide-y divide-gray-50">
+      <div class="bg-white rounded-[24px] px-5 py-2 shadow-sm border border-gray-200">
+        <div class="divide-y divide-gray-200">
           <div class="flex justify-between items-center py-4">
-            <span class="text-[16px] text-gray-400 font-bold">เลขที่สั่งซื้อ</span>
-            <span class="text-[16px] font-bold text-gray-800">1202603170001</span>
+            <span class="text-[16px] text-gray-600 font-bold">เลขที่สั่งซื้อ</span>
+            <span class="text-[16px] font-bold text-gray-900">1202603170001</span>
           </div>
           <div class="flex justify-between items-center py-4">
-            <span class="text-[16px] text-gray-400 font-bold">วันที่ & เวลา</span>
-            <span class="text-[16px] font-bold text-gray-800">{{ formattedDate }}</span>
+            <span class="text-[16px] text-gray-600 font-bold">วันที่ & เวลา</span>
+            <span class="text-[16px] font-bold text-gray-900">{{ formattedDate }}</span>
           </div>
           <div class="flex justify-between items-center py-4">
-            <span class="text-[16px] text-gray-400 font-bold">ประเภทการสั่ง</span>
-            <span class="text-[16px] font-bold text-gray-800">{{ deliveryOption === 'delivery' ? 'บริการจัดส่ง' : 'รับกลับบ้าน' }}</span>
+            <span class="text-[16px] text-gray-600 font-bold">ประเภทการสั่ง</span>
+            <span class="text-[16px] font-bold text-gray-900">{{ deliveryOption === 'delivery' ? 'บริการจัดส่ง' : 'รับกลับบ้าน' }}</span>
           </div>
           <div class="flex justify-between items-center py-4">
-            <span class="text-[16px] text-gray-400 font-bold">ห้อง</span>
-            <span class="text-[16px] font-bold text-gray-800">{{ room }}</span>
+            <span class="text-[16px] text-gray-600 font-bold">ห้อง</span>
+            <span class="text-[16px] font-bold text-gray-900">{{ room }}</span>
           </div>
           <div class="flex justify-between items-center py-4">
-            <span class="text-[16px] text-gray-400 font-bold">HN</span>
-            <span class="text-[16px] font-bold text-gray-800">{{ hn }}</span>
+            <span class="text-[16px] text-gray-600 font-bold">HN</span>
+            <span class="text-[16px] font-bold text-gray-900">{{ hn }}</span>
           </div>
           <div class="flex justify-between items-center py-4">
-            <span class="text-[16px] text-gray-400 font-bold">วิธีการชำระเงิน</span>
-            <span class="text-[16px] font-bold text-gray-800">เงินสด</span>
+            <span class="text-[16px] text-gray-600 font-bold">วิธีการชำระเงิน</span>
+            <span class="text-[16px] font-bold text-gray-900">เงินสด</span>
           </div>
           <div class="flex justify-between items-center py-4">
-            <span class="text-[16px] text-gray-400 font-bold">สถานะการชำระเงิน</span>
+            <span class="text-[16px] text-gray-600 font-bold">สถานะการชำระเงิน</span>
             <span class="text-[16px] font-bold text-[#caa542]">รอดำเนินการ</span>
           </div>
           <div class="flex justify-between items-center py-4">
-            <span class="text-[16px] text-gray-400 font-bold">สถานะออเดอร์</span>
-            <span class="text-[16px] font-bold text-gray-800">รอดำเนินการ</span>
+            <span class="text-[16px] text-gray-600 font-bold">สถานะออเดอร์</span>
+            <span class="text-[16px] font-bold text-gray-900">รอดำเนินการ</span>
           </div>
         </div>
       </div>
 
       <!-- 4. Items Card -->
-      <div class="bg-white rounded-[24px] p-7 shadow-sm border border-gray-50/50">
-        <div class="flex justify-between items-center mb-6">
-           <h3 class="text-[16px] font-bold text-gray-800">รายการออเดอร์</h3>
-           <span class="text-[12px] text-gray-400 font-bold uppercase tracking-wider">ออเดอร์ทั้งหมด</span>
+      <div class="bg-white rounded-[24px] p-5 shadow-sm border border-gray-200">
+        <div class="flex justify-between items-center mb-4">
+           <h3 class="text-[16px] font-bold text-gray-900 uppercase tracking-tight">รายการออเดอร์</h3>
+           <span class="text-[12px] text-gray-500 font-bold uppercase tracking-wider">ออเดอร์ทั้งหมด</span>
         </div>
-        <div class="space-y-6 pb-6 border-b border-gray-50 mb-6">
-          <div v-for="item in cartItems" :key="item.id" class="flex justify-between items-start pb-4 border-b border-gray-50 last:border-0 last:pb-0">
+        <div class="space-y-4 pb-4 border-b border-gray-200 mb-4">
+          <div v-for="item in cartItems" :key="item.id" class="flex justify-between items-start pb-4 border-b border-gray-200 last:border-0 last:pb-0">
             <div class="flex gap-4 min-w-0">
               <div class="w-14 h-14 rounded-[18px] overflow-hidden border border-gray-50 shadow-sm bg-gray-50/50 shrink-0 flex items-center justify-center">
                  <img v-if="item.img" :src="item.img" class="w-full h-full object-cover" />
@@ -166,21 +166,21 @@ const formattedDate = computed(() => {
             </div>
           </div>
         </div>
-        <div class="space-y-2 mb-6">
-          <div class="flex justify-between items-center text-[15px] font-medium text-gray-400">
+        <div class="space-y-2 mb-4">
+          <div class="flex justify-between items-center text-[15px] font-bold text-gray-600">
              <span>ยอดรวม</span>
-             <span class="font-bold text-gray-800">฿{{ subtotal.toLocaleString() }}</span>
+             <span class="font-bold text-gray-900">฿{{ subtotal.toLocaleString() }}</span>
           </div>
-          <div v-if="discount > 0" class="flex justify-between items-center text-[15px] font-medium text-red-500">
+          <div v-if="discount > 0" class="flex justify-between items-center text-[15px] font-bold text-red-500">
              <span>ส่วนลด</span>
              <span class="font-bold">-฿{{ discount.toLocaleString() }}</span>
           </div>
-           <div class="flex justify-between items-center text-[15px] font-medium text-gray-400">
+           <div class="flex justify-between items-center text-[15px] font-bold text-gray-600">
              <span>ภาษี (7%)</span>
-             <span class="font-bold text-gray-800">฿{{ tax.toLocaleString(undefined, { minimumFractionDigits: 2 }) }}</span>
+             <span class="font-bold text-gray-900">฿{{ tax.toLocaleString(undefined, { minimumFractionDigits: 2 }) }}</span>
           </div>
         </div>
-        <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+        <div class="flex justify-between items-center pt-4 border-t border-gray-200">
            <span class="text-[18px] font-bold text-gray-900">ยอดรวมสุทธิ</span>
            <span class="text-[24px] font-black text-[#228085]">฿{{ total.toLocaleString(undefined, { minimumFractionDigits: 2 }) }}</span>
         </div>
@@ -194,7 +194,7 @@ const formattedDate = computed(() => {
     </div>
 
     <!-- Standardized Bottom Nav (English labels as per screenshot) -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-50 flex h-[85px] items-center justify-around z-50 pb-safe shadow-[0_-5px_25px_rgba(0,0,0,0.03)] px-4">
+    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[375px] bg-white border-t border-gray-200 flex h-[85px] items-center justify-around z-50 pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.05)] px-4">
       <div @click="router.push({ name: 'menu' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-300 cursor-pointer w-24 h-full group active:scale-95 transition-all">
          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 2v10c0 1.1.9 2 2 2h2v7h2v-7h2c1.1 0 2-.9 2-2V2H6z M11 10H8V5h1v5h1V5h1v5z"/></svg>
          <span class="text-[12px] font-bold tracking-tight">Menu</span>
