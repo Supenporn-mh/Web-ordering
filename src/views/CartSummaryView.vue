@@ -266,8 +266,8 @@ const handleConfirmOrder = () => {
       </div>
     </div>
 
-    <!-- Fixed Action Button (Uniform rounded-[24px]) -->
-    <div class="fixed bottom-0 left-0 right-0 p-6 z-40 bg-white/95 backdrop-blur-md border-t border-gray-50 pb-10">
+    <!-- Fixed Bottom Action (Standardized rounded-[24px]) -->
+    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[375px] bg-white/95 backdrop-blur-md border-t border-gray-100 p-6 pb-10 z-30 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]">
       <button 
         @click="handleConfirmOrder" 
         :disabled="cartItems.length === 0"
