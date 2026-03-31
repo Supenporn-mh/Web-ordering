@@ -99,7 +99,7 @@ const handleConfirmOrder = () => {
 <template>
   <div class="min-h-screen bg-[#f8fcfc] font-sans pb-40">
     <!-- Header -->
-    <div class="px-5 py-4 flex items-center bg-white border-b border-gray-50 sticky top-0 z-20 shadow-sm shadow-teal-900/5">
+    <div class="px-5 py-3 flex items-center bg-white border-b border-gray-200 sticky top-0 z-20 shadow-sm shadow-teal-900/5">
       <button @click="router.back()" class="text-gray-900 absolute left-5">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
       </button>
@@ -108,18 +108,18 @@ const handleConfirmOrder = () => {
 
     <div class="p-4 space-y-4">
       <!-- Location Card (Uniform rounded-[24px]) -->
-      <div class="bg-white rounded-[24px] p-6 shadow-sm border border-gray-50/50">
+      <div class="bg-white rounded-[24px] p-5 shadow-sm border border-gray-200">
         <!-- Header Row -->
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex justify-between items-center mb-3">
           <h3 class="text-[18px] font-bold text-gray-900 tracking-tight">สถานที่จัดส่ง</h3>
           <button @click="router.push({ name: 'checkout' })" class="text-[#228085] font-bold text-[16px] tracking-tight">แก้ไข</button>
         </div>
         
         <!-- Divider -->
-        <div class="h-[1px] bg-gray-50 w-full mb-5"></div>
+        <div class="h-[1px] bg-gray-200 w-full mb-3"></div>
 
         <!-- Location Detail Row -->
-        <div class="flex items-start gap-3.5 mb-6">
+        <div class="flex items-start gap-3.5 mb-4">
           <div class="mt-1 text-gray-900 shrink-0">
              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           </div>
@@ -145,13 +145,13 @@ const handleConfirmOrder = () => {
       </div>
 
       <!-- Items List Card (Uniform rounded-[24px]) -->
-      <div class="bg-white rounded-[24px] p-6 shadow-sm border border-gray-50/30">
-        <h2 class="text-[18px] font-bold text-gray-800 mb-6 text-center tracking-tight border-b border-gray-50 pb-3">รายการออเดอร์</h2>
+      <div class="bg-white rounded-[24px] p-5 shadow-sm border border-gray-200">
+        <h2 class="text-[18px] font-bold text-gray-800 mb-4 text-center tracking-tight border-b border-gray-200 pb-2">รายการออเดอร์</h2>
         
-        <div class="space-y-8">
+        <div class="space-y-6">
           <div v-for="(item, index) in cartItems" :key="item.id" class="flex gap-4">
             <!-- Inner images/boxes also rounded-[18px] to be slightly less than card but still unified -->
-            <div class="w-16 h-16 rounded-[18px] bg-[#eff8f8] shrink-0 flex items-center justify-center border border-gray-50 shadow-sm overflow-hidden">
+            <div class="w-16 h-16 rounded-[18px] bg-[#eff8f8] shrink-0 flex items-center justify-center border border-gray-200 shadow-sm overflow-hidden">
                <img :src="item.img" class="w-full h-full object-cover" v-if="item.img" />
                <svg v-else class="w-8 h-8 text-[#228085]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11s2 2 8 2 8-2 8-2M4 14s2 2 8 2 8-2 8-2M2 8c0 0 4-2 10-2s10 2 10 2l-1 11a2 2 0 01-2 2H5a2 2 0 01-2-2L2 8z"/><path d="M12 3v2"/></svg>
             </div>
@@ -186,8 +186,8 @@ const handleConfirmOrder = () => {
       </div>
 
       <!-- Promo Code Card (Like Grab/Shopee) -->
-      <div class="bg-white rounded-[24px] p-6 shadow-sm border border-gray-50/50">
-        <div class="flex items-center gap-3 mb-4">
+      <div class="bg-white rounded-[24px] p-5 shadow-sm border border-gray-200">
+        <div class="flex items-center gap-3 mb-3">
            <svg class="w-6 h-6 text-[#228085]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4v-3a2 2 0 00-2-2H5z"/></svg>
            <h3 class="text-[16px] font-bold text-gray-800">คูปองส่วนลด / รหัสโปรโมชั่น</h3>
         </div>
@@ -203,9 +203,9 @@ const handleConfirmOrder = () => {
       </div>
 
       <!-- Payment Summary Card (Uniform rounded-[24px]) -->
-      <div class="bg-white rounded-[24px] p-7 shadow-sm border border-gray-50/30">
-        <h2 class="text-[18px] font-bold text-gray-800 mb-6 text-center tracking-tight">สรุปยอดชำระ</h2>
-        <div class="space-y-4 pb-5 border-b border-gray-100 mb-5">
+      <div class="bg-white rounded-[24px] p-5 shadow-sm border border-gray-200">
+        <h2 class="text-[18px] font-bold text-gray-800 mb-4 text-center tracking-tight">สรุปยอดชำระ</h2>
+        <div class="space-y-4 pb-5 border-b border-gray-200 mb-5">
           <div class="flex justify-between items-center text-[16px] font-medium text-gray-800">
              <span>ยอดรวม</span>
              <span class="font-bold">฿{{ subtotal.toLocaleString() }}</span>
