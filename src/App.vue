@@ -4,7 +4,7 @@ const route = useRoute()
 </script>
 
 <template>
-  <div class="max-w-[390px] mx-auto bg-[#f8fcfc] min-h-screen relative overflow-x-hidden shadow-2xl shadow-black/10">
+  <div class="max-w-[375px] mx-auto bg-[#f8fcfc] min-h-screen relative overflow-x-hidden shadow-2xl shadow-black/20">
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
         <component :is="Component" :key="route?.path || 'app'" />
@@ -26,7 +26,7 @@ const route = useRoute()
 
 /* Custom UI Reset for Web Ordering Platform */
 body {
-  @apply bg-gray-100 antialiased font-sans text-gray-900;
+  @apply bg-gray-200 antialiased font-sans text-gray-900;
   margin: 0;
   padding: 0;
 }
