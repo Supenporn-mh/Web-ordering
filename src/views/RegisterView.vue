@@ -41,37 +41,37 @@ const handleConfirmInfo = () => {
       <div class="space-y-7">
 
         <div class="space-y-2">
-          <label class="text-[13px] font-semibold uppercase tracking-wider text-gray-400 ml-1">ชื่อ-นามสกุล <span class="text-red-500">*</span></label>
+          <label class="text-[13px] font-bold uppercase tracking-wider text-gray-600 ml-1">ชื่อ-นามสกุล <span class="text-red-500">*</span></label>
           <input
             v-model="name"
             type="text"
             placeholder="กรอกชื่อ-นามสกุล"
-            class="w-full bg-[#f8f9fc] border-none focus:ring-2 focus:ring-[#228085]/50 focus:bg-white rounded-[18px] py-4.5 px-6 text-lg font-medium text-gray-800 outline-none transition-all placeholder:text-gray-200 shadow-sm"
+            class="w-full bg-[#f8fbff] border border-gray-200 focus:ring-2 focus:ring-[#228085]/50 focus:bg-white rounded-[18px] py-4.5 px-6 text-lg font-bold text-gray-800 outline-none transition-all placeholder:text-gray-400 shadow-sm"
           />
         </div>
 
         <div class="space-y-2">
-          <label class="text-[13px] font-semibold uppercase tracking-wider text-gray-400 ml-1">อีเมล <span class="text-[10px] text-gray-300 font-semibold lowercase">(optional)</span></label>
+          <label class="text-[13px] font-bold uppercase tracking-wider text-gray-600 ml-1">อีเมล <span class="text-[10px] text-gray-500 font-bold lowercase">(optional)</span></label>
           <input
             v-model="email"
             type="email"
             placeholder="กรอกอีเมล"
-            class="w-full bg-[#f8f9fc] border-none focus:ring-2 focus:ring-[#228085]/50 focus:bg-white rounded-[18px] py-4.5 px-6 text-lg font-medium text-gray-800 outline-none transition-all placeholder:text-gray-200 shadow-sm"
+            class="w-full bg-[#f8fbff] border border-gray-200 focus:ring-2 focus:ring-[#228085]/50 focus:bg-white rounded-[18px] py-4.5 px-6 text-lg font-bold text-gray-800 outline-none transition-all placeholder:text-gray-400 shadow-sm"
           />
         </div>
 
-        <div class="bg-[#f8f9fc] rounded-3xl p-6 border border-gray-50 mt-2">
+        <div class="bg-[#f8fbff] rounded-3xl p-6 border border-gray-200 mt-2">
           <label class="flex items-start gap-4 cursor-pointer group select-none">
             <input type="checkbox" v-model="acceptPDPA" class="hidden" />
             <div
-              class="mt-1 w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 transition-all p-1"
-              :class="acceptPDPA ? 'bg-[#228085] border-[#228085]' : 'border-gray-200 bg-white'"
+              class="mt-1 w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 transition-all p-1 shadow-sm"
+              :class="acceptPDPA ? 'bg-[#228085] border-[#228085]' : 'border-gray-300 bg-white'"
             >
               <svg v-if="acceptPDPA" class="w-full h-full text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"/>
               </svg>
             </div>
-            <span class="text-[14px] text-gray-500 font-semibold leading-relaxed">
+            <span class="text-[14px] text-gray-700 font-bold leading-relaxed">
               ฉันได้อ่านและยอมรับ
               <button type="button" @click.stop="showPDPA = true" class="text-[#228085] font-bold underline underline-offset-4 decoration-2 hover:text-[#1a6367]">นโยบายความเป็นส่วนตัว (PDPA)</button>
               และยินยอมให้ระบบเก็บรักษาข้อมูลส่วนบุคคล
@@ -103,12 +103,12 @@ const handleConfirmInfo = () => {
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
           </div>
-          <div class="overflow-y-auto flex-1 text-[15px] font-medium text-gray-500 leading-relaxed space-y-5 pr-1">
+          <div class="overflow-y-auto flex-1 text-[15px] font-bold text-gray-600 leading-relaxed space-y-5 pr-1 lowercase">
             <p>บริษัทฯ มุ่งมั่นที่จะปกป้องข้อมูลส่วนบุคคลของท่าน เพื่อให้ท่านได้รับประสบการณ์ที่ดีที่สุดในการใช้บริการ</p>
-            <div class="bg-[#f8f9fc] p-6 rounded-2xl space-y-3.5 border border-gray-50">
-               <div class="flex gap-3"><span class="text-[#228085] font-bold">1.</span> <span>เก็บข้อมูลเพื่อการยืนยันตัวตนและการใช้งาน (OTP)</span></div>
-               <div class="flex gap-3"><span class="text-[#228085] font-bold">2.</span> <span>บันทึกชื่อและรายละเอียดเพื่อใช้ในการเตรียมอาหาร</span></div>
-               <div class="flex gap-3"><span class="text-[#228085] font-bold">3.</span> <span>ข้อมูลของท่านจะถูกเก็บเป็นความลับสูงสุด</span></div>
+            <div class="bg-[#f8fbff] p-6 rounded-2xl space-y-3.5 border border-gray-200">
+               <div class="flex gap-3"><span class="text-[#228085] font-bold">1.</span> <span class="capitalize">เก็บข้อมูลเพื่อการยืนยันตัวตนและการใช้งาน (OTP)</span></div>
+               <div class="flex gap-3"><span class="text-[#228085] font-bold">2.</span> <span class="capitalize">บันทึกชื่อและรายละเอียดเพื่อใช้ในการเตรียมอาหาร</span></div>
+               <div class="flex gap-3"><span class="text-[#228085] font-bold">3.</span> <span class="capitalize">ข้อมูลของท่านจะถูกเก็บเป็นความลับสูงสุด</span></div>
             </div>
             <p>ท่านมีสิทธิ์ตามกฎหมาย PDPA ในการแก้ไขหรือลบข้อมูลส่วนบุคคลของท่านได้ทุกเมื่อ</p>
           </div>

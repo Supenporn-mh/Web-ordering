@@ -82,23 +82,23 @@ const orders = ref<any[]>(mockOrders)
     <div class="px-6 pt-10 pb-6 flex justify-between items-start">
       <div>
         <h1 class="text-[24px] font-bold text-gray-900 tracking-tight">{{ t.title }}</h1>
-        <p class="text-[14px] text-gray-400 font-medium tracking-wide">{{ t.subTitle }}</p>
+        <p class="text-[14px] text-gray-600 font-bold tracking-wide">{{ t.subTitle }}</p>
       </div>
     </div>
 
     <!-- Tabs (Based on screenshot, standardized to system rounded-24) -->
     <div class="px-5 mb-8">
-      <div class="bg-gray-100/60 p-1.5 rounded-[24px] flex gap-2">
+      <div class="bg-gray-100/80 p-1.5 rounded-[24px] flex gap-2 border border-gray-200">
         <button 
           @click="activeTab = 'active'"
-          :class="activeTab === 'active' ? 'bg-white text-gray-900 shadow-sm font-bold' : 'text-gray-400 font-bold'"
+          :class="activeTab === 'active' ? 'bg-white text-gray-900 shadow-md font-bold' : 'text-gray-500 font-bold'"
           class="flex-1 py-3.5 rounded-[20px] text-[16px] transition-all"
         >
           {{ t.tabActive }}
         </button>
         <button 
           @click="activeTab = 'history'"
-          :class="activeTab === 'history' ? 'bg-white text-gray-900 shadow-sm font-bold' : 'text-gray-400 font-bold'"
+          :class="activeTab === 'history' ? 'bg-white text-gray-900 shadow-md font-bold' : 'text-gray-500 font-bold'"
           class="flex-1 py-3.5 rounded-[20px] text-[16px] transition-all"
         >
           {{ t.tabHistory }}
@@ -113,12 +113,12 @@ const orders = ref<any[]>(mockOrders)
       </div>
       
       <!-- Order Card -->
-      <div v-for="order in orders" :key="order.id" class="bg-white rounded-[24px] p-6 shadow-sm border border-gray-50/50 flex flex-col gap-4">
+      <div v-for="order in orders" :key="order.id" class="bg-white rounded-[24px] p-6 shadow-sm border border-gray-200 flex flex-col gap-4">
          <!-- Order Header -->
          <div class="flex justify-between items-start">
             <div>
-               <h3 class="text-[18px] font-bold text-gray-800 tracking-tight">{{ t.orderNumPrefix }}{{ order.id }}</h3>
-               <p class="text-[13px] text-gray-400 font-medium mt-1">{{ order.date }}</p>
+               <h3 class="text-[18px] font-bold text-gray-900 tracking-tight">{{ t.orderNumPrefix }}{{ order.id }}</h3>
+               <p class="text-[13px] text-gray-500 font-bold mt-1 uppercase tracking-tight">{{ order.date }}</p>
             </div>
             <!-- Status Badge (Orange as per screenshot) -->
             <span class="px-4 py-1.5 rounded-full bg-[#f6ab40] text-white text-[13px] font-bold shadow-sm shadow-orange-500/10">
@@ -135,9 +135,9 @@ const orders = ref<any[]>(mockOrders)
          </div>
 
          <!-- Details Footer -->
-         <div class="mt-4 pt-4 border-t border-gray-50/80 space-y-2">
+         <div class="mt-4 pt-4 border-t border-gray-200/80 space-y-2">
             <div class="flex justify-between items-center text-[14px]">
-               <span class="text-gray-400 font-bold">{{ t.typeLabel }}</span>
+               <span class="text-gray-500 font-bold uppercase tracking-tight">{{ t.typeLabel }}</span>
                <span class="text-gray-800 font-bold">{{ t.takeaway }}</span>
             </div>
             <div class="flex justify-between items-center text-[18px]">
@@ -149,8 +149,8 @@ const orders = ref<any[]>(mockOrders)
     </div>
 
     <!-- Standardized Bottom Nav -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-50 flex h-[85px] items-center justify-around z-50 pb-safe shadow-[0_-5px_25px_rgba(0,0,0,0.03)] px-4">
-      <div @click="router.push({ name: 'menu' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-400 cursor-pointer w-24 h-full active:scale-95 transition-all">
+    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[375px] bg-white border-t border-gray-200 flex h-[85px] items-center justify-around z-50 pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.05)] px-4">
+      <div @click="router.push({ name: 'menu' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-500 cursor-pointer w-24 h-full active:scale-95 transition-all">
          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 2v7c0 1.1.9 2 2 2h4v10h2V11h4c1.1 0 2-.9 2-2V2H3z m8 7H5V4h1v5h1V4h1v5h1V4h1v5h1V4h2v5z"/></svg>
          <span class="text-[12px] font-bold tracking-tight">{{ t.menu }}</span>
       </div>
@@ -160,7 +160,7 @@ const orders = ref<any[]>(mockOrders)
          <span class="text-[12px] font-bold tracking-tight">{{ t.orders }}</span>
       </div>
 
-      <div @click="router.push({ name: 'profile' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-400 cursor-pointer w-24 h-full group active:scale-95 transition-all">
+      <div @click="router.push({ name: 'profile' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-500 cursor-pointer w-24 h-full group active:scale-95 transition-all">
          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
          <span class="text-[12px] font-bold tracking-tight">{{ t.profile }}</span>
       </div>

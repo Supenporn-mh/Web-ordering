@@ -84,7 +84,7 @@ const t = computed(() => translations[currentLang.value])
     <div class="px-6 pt-10 pb-6 flex justify-between items-start">
       <div>
         <h1 class="text-[28px] font-bold text-gray-900 tracking-tight">{{ t.title }}</h1>
-        <p class="text-[14px] text-gray-400 font-medium tracking-wide">{{ t.subTitle }}</p>
+        <p class="text-[14px] text-gray-600 font-bold tracking-wide">{{ t.subTitle }}</p>
       </div>
       <!-- Language Toggle (pill style) -->
       <div class="bg-gray-100/80 p-1 rounded-full flex gap-1">
@@ -103,7 +103,7 @@ const t = computed(() => translations[currentLang.value])
 
     <div class="px-5 space-y-6">
       <!-- Profile Header Card (Standardized rounded-[24px]) -->
-      <div class="bg-white rounded-[24px] p-8 shadow-sm border border-gray-50/50 flex flex-col items-center text-center">
+      <div class="bg-white rounded-[24px] p-8 shadow-sm border border-gray-200 flex flex-col items-center text-center">
         <!-- Avatar -->
         <div class="w-24 h-24 bg-[#228085] rounded-full flex items-center justify-center text-white text-[32px] font-bold shadow-xl shadow-teal-500/20 mb-4">
           {{ userData.firstName.charAt(0).toUpperCase() }}
@@ -111,65 +111,65 @@ const t = computed(() => translations[currentLang.value])
         <h2 class="text-[20px] font-bold text-gray-900 mb-4 tracking-tight">{{ userData.firstName }} {{ userData.lastName }}</h2>
         
         <!-- Role Badge Box -->
-        <div class="w-full bg-[#f0fafa] rounded-[18px] py-4 px-6 border border-teal-50/50">
-           <p class="text-[12px] text-gray-400 font-bold uppercase tracking-widest mb-1">{{ t.role }}</p>
+        <div class="w-full bg-[#f0fafa] rounded-[18px] py-4 px-6 border border-gray-200">
+           <p class="text-[12px] text-gray-500 font-bold uppercase tracking-widest mb-1">{{ t.role }}</p>
            <p class="text-[18px] font-bold text-[#228085]">Member</p>
         </div>
       </div>
 
       <!-- Details Card -->
-      <div class="bg-white rounded-[24px] p-6 shadow-sm border border-gray-100/50 space-y-7">
+      <div class="bg-white rounded-[24px] p-6 shadow-sm border border-gray-200 space-y-7">
         <!-- Detail Row: First Name -->
         <div class="flex items-center gap-5">
-           <div class="w-12 h-12 rounded-[16px] bg-[#f0fafa] flex items-center justify-center text-[#228085] shrink-0">
+           <div class="w-12 h-12 rounded-[16px] bg-[#f0fafa] flex items-center justify-center text-[#228085] shrink-0 border border-gray-200">
              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
            </div>
-           <div class="flex-1 border-b border-gray-50 pb-3">
-             <p class="text-[14px] text-gray-400 font-bold mb-0.5 tracking-wide">{{ t.fName }}</p>
+           <div class="flex-1 border-b border-gray-200 pb-3">
+             <p class="text-[14px] text-gray-500 font-bold mb-0.5 tracking-wide">{{ t.fName }}</p>
              <p class="text-[16px] font-bold text-gray-900">{{ userData.firstName }}</p>
            </div>
         </div>
 
         <!-- Detail Row: Last Name -->
         <div class="flex items-center gap-5">
-           <div class="w-12 h-12 rounded-[16px] bg-[#f0fafa] flex items-center justify-center text-[#228085] shrink-0">
+           <div class="w-12 h-12 rounded-[16px] bg-[#f0fafa] flex items-center justify-center text-[#228085] shrink-0 border border-gray-200">
              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
            </div>
-           <div class="flex-1 border-b border-gray-50 pb-3">
-             <p class="text-[14px] text-gray-400 font-bold mb-0.5 tracking-wide">{{ t.lName }}</p>
+           <div class="flex-1 border-b border-gray-200 pb-3">
+             <p class="text-[14px] text-gray-500 font-bold mb-0.5 tracking-wide">{{ t.lName }}</p>
              <p class="text-[16px] font-bold text-gray-900">{{ userData.lastName }}</p>
            </div>
         </div>
 
         <!-- Detail Row: Email -->
         <div class="flex items-center gap-5">
-           <div class="w-12 h-12 rounded-[16px] bg-[#f0fafa] flex items-center justify-center text-[#228085] shrink-0">
+           <div class="w-12 h-12 rounded-[16px] bg-[#f0fafa] flex items-center justify-center text-[#228085] shrink-0 border border-gray-200">
              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v10a2 2 0 002 2z"></path></svg>
            </div>
-           <div class="flex-1 border-b border-gray-50 pb-3">
-             <p class="text-[14px] text-gray-400 font-bold mb-0.5 tracking-wide">{{ t.email }}</p>
-             <p class="text-[16px] font-bold text-gray-300 italic">{{ userData.email || t.email }}</p>
+           <div class="flex-1 border-b border-gray-200 pb-3">
+             <p class="text-[14px] text-gray-500 font-bold mb-0.5 tracking-wide">{{ t.email }}</p>
+             <p class="text-[16px] font-bold text-gray-400 italic">{{ userData.email || t.email }}</p>
            </div>
         </div>
 
         <!-- Detail Row: Phone -->
         <div class="flex items-center gap-5">
-           <div class="w-12 h-12 rounded-[16px] bg-[#f0fafa] flex items-center justify-center text-[#228085] shrink-0">
+           <div class="w-12 h-12 rounded-[16px] bg-[#f0fafa] flex items-center justify-center text-[#228085] shrink-0 border border-gray-200">
              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
            </div>
-           <div class="flex-1 border-b border-gray-50 pb-3">
-             <p class="text-[14px] text-gray-400 font-bold mb-0.5 tracking-wide">{{ t.phone }}</p>
+           <div class="flex-1 border-b border-gray-200 pb-3">
+             <p class="text-[14px] text-gray-500 font-bold mb-0.5 tracking-wide">{{ t.phone }}</p>
              <p class="text-[16px] font-bold text-gray-900">{{ userData.phone }}</p>
            </div>
         </div>
 
         <!-- Detail Row: HN -->
         <div class="flex items-center gap-5">
-           <div class="w-12 h-12 rounded-[16px] bg-[#f0fafa] flex items-center justify-center text-[#228085] shrink-0">
+           <div class="w-12 h-12 rounded-[16px] bg-[#f0fafa] flex items-center justify-center text-[#228085] shrink-0 border border-gray-200">
              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
            </div>
            <div class="flex-1">
-             <p class="text-[14px] text-gray-400 font-bold mb-0.5 tracking-wide">{{ t.hn }}</p>
+             <p class="text-[14px] text-gray-500 font-bold mb-0.5 tracking-wide">{{ t.hn }}</p>
              <p class="text-[16px] font-bold text-gray-900">{{ userData.hn }}</p>
            </div>
         </div>
@@ -224,13 +224,13 @@ const t = computed(() => translations[currentLang.value])
     </div>
 
     <!-- Standardized Bottom Nav (English labels as per screenshot) -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-50 flex h-[85px] items-center justify-around z-50 pb-safe shadow-[0_-5px_25px_rgba(0,0,0,0.03)] px-4">
-      <div @click="router.push({ name: 'menu' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-400 cursor-pointer w-24 h-full active:scale-95 transition-all">
+    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[375px] bg-white border-t border-gray-200 flex h-[85px] items-center justify-around z-50 pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.05)] px-4">
+      <div @click="router.push({ name: 'menu' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-500 cursor-pointer w-24 h-full active:scale-95 transition-all">
          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 2v7c0 1.1.9 2 2 2h4v10h2V11h4c1.1 0 2-.9 2-2V2H3z m8 7H5V4h1v5h1V4h1v5h1V4h1v5h1V4h2v5z"/></svg>
          <span class="text-[12px] font-bold tracking-tight">{{ t.menu }}</span>
       </div>
       
-      <div @click="router.push({ name: 'orders' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-400 cursor-pointer w-24 h-full active:scale-95 transition-all">
+      <div @click="router.push({ name: 'orders' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-500 cursor-pointer w-24 h-full active:scale-95 transition-all">
          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
          <span class="text-[12px] font-bold tracking-tight">{{ t.orders }}</span>
       </div>

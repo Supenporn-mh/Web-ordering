@@ -109,16 +109,16 @@ const addToCart = () => {
 <template>
   <div class="min-h-screen bg-[#f8fcfc] font-sans pb-32">
     <!-- Top Header (Based on screenshot: Demo | 0xxxxxxx) -->
-    <div class="bg-white px-5 pt-3 pb-4 flex justify-between items-center text-[14px] font-bold text-gray-800">
+    <div class="bg-white px-5 pt-3 pb-4 flex justify-between items-center text-[15px] font-bold text-gray-900 border-b border-gray-100">
       <span>Demo</span>
-      <span class="text-gray-400">0xxxxxxx</span>
+      <span class="text-gray-500">0xxxxxxx</span>
     </div>
 
     <!-- Title & Language Toggle -->
     <div class="px-5 pt-4 pb-2 flex justify-between items-end">
       <div>
         <h1 class="text-[28px] font-bold text-gray-900 tracking-tight leading-none">{{ t.title }}</h1>
-        <p class="text-[14px] text-gray-400 mt-2">{{ t.subTitle }}</p>
+        <p class="text-[14px] text-gray-600 font-bold mt-2">{{ t.subTitle }}</p>
       </div>
       <div class="flex bg-gray-100 p-1 rounded-full text-[12px] font-bold">
         <button @click="currentLang = 'EN'" :class="currentLang === 'EN' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-400'" class="px-3 py-1 rounded-full transition-all">EN</button>
@@ -165,18 +165,18 @@ const addToCart = () => {
     </div>
 
     <!-- Standardized Bottom Nav (Thai labels) -->
-    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[375px] bg-white border-t border-gray-100 flex h-[85px] items-center justify-around z-50 pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.05)] px-4">
+    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[375px] bg-white border-t border-gray-200 flex h-[85px] items-center justify-around z-50 pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.05)] px-4">
       <div class="flex flex-col items-center justify-center gap-1.5 text-[#228085] cursor-pointer w-24 h-full relative">
-         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 2v10c0 1.1.9 2 2 2h2v7h2v-7h2c1.1 0 2-.9 2-2V2H6z M11 10H8V5h1v5h1V5h1v5z"/></svg>
+         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 2v10c0 1.1.9 2 2 2h2v7h2v-7h2c1.1 0 2-.9 2-2V2H6z M11 10H8V5h1v5h1V5h1v5h1V5h1v5z"/></svg>
          <span class="text-[12px] font-bold tracking-tight">{{ t.menu }}</span>
       </div>
       
-      <div @click="router.push({ name: 'orders' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-400 cursor-pointer w-24 h-full active:scale-95 transition-all">
+      <div @click="router.push({ name: 'orders' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-500 cursor-pointer w-24 h-full active:scale-95 transition-all">
          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
          <span class="text-[12px] font-bold tracking-tight">{{ t.orders }}</span>
       </div>
 
-      <div @click="router.push({ name: 'profile' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-400 cursor-pointer w-24 h-full group active:scale-95 transition-all">
+      <div @click="router.push({ name: 'profile' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-500 cursor-pointer w-24 h-full group active:scale-95 transition-all">
          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
          <span class="text-[12px] font-bold tracking-tight">{{ t.profile }}</span>
       </div>

@@ -47,45 +47,45 @@ const addToCart = () => {
 
     <div class="px-6 -mt-6 relative z-10 space-y-6">
       <!-- Title & Desc -->
-      <div class="bg-white p-6 rounded-[1.5rem] shadow-sm border border-gray-100 space-y-2">
+      <div class="bg-white p-6 rounded-[1.5rem] shadow-sm border border-gray-200 space-y-2">
         <div class="flex justify-between items-start gap-4">
           <h1 class="text-lg font-bold text-gray-900 leading-tight">{{ item.name }}</h1>
           <span class="text-lg font-bold text-[#228085]">฿{{ item.price }}</span>
         </div>
-        <p class="text-gray-400 text-xs font-medium leading-relaxed">{{ item.desc }}</p>
+        <p class="text-gray-600 text-[13px] font-bold leading-relaxed">{{ item.desc }}</p>
       </div>
 
       <!-- Add-ons -->
-      <div class="bg-white p-6 rounded-[1.5rem] shadow-sm border border-gray-100 space-y-4">
-        <h3 class="font-bold text-sm text-gray-900">ตัวเลือกเพิ่มเติม<span class="text-gray-400 text-[10px] font-normal ml-2">(ถ้ามี)</span></h3>
+      <div class="bg-white p-6 rounded-[1.5rem] shadow-sm border border-gray-200 space-y-4">
+        <h3 class="font-bold text-sm text-gray-900 uppercase tracking-tight">ตัวเลือกเพิ่มเติม<span class="text-gray-500 text-[10px] ml-2 lowercase font-bold">(ถ้ามี)</span></h3>
         <div class="space-y-5">
           <label v-for="ex in extras" :key="ex.id" class="flex items-center justify-between cursor-pointer group">
             <div class="flex items-center gap-4">
               <input type="checkbox" v-model="ex.selected" class="w-5 h-5 accent-[#228085] rounded-md transition-all outline-none" />
-              <span class="text-gray-600 font-bold group-hover:text-gray-900 text-sm transition-colors">{{ ex.name }}</span>
+              <span class="text-gray-800 font-bold group-hover:text-[#228085] text-[15px] transition-colors">{{ ex.name }}</span>
             </div>
-            <span class="text-gray-400 font-bold text-sm" v-if="ex.price > 0">+฿{{ ex.price }}</span>
+            <span class="text-gray-900 font-bold text-[15px]" v-if="ex.price > 0">+฿{{ ex.price }}</span>
           </label>
         </div>
       </div>
 
       <!-- Special Instructions -->
-      <div class="bg-white p-6 rounded-[1.5rem] shadow-sm border border-gray-100 space-y-4">
-        <h3 class="font-bold text-sm text-gray-900">ความต้องการพิเศษ</h3>
-        <textarea v-model="note" placeholder="เช่น ไม่ใส่ผักชี, เผ็ดน้อยมาก..." class="w-full bg-[#e7f4f3] border border-gray-100 rounded-2xl py-4 px-5 text-gray-600 outline-none focus:border-[#228085] min-h-[100px] transition-colors font-medium text-xs"></textarea>
+      <div class="bg-white p-6 rounded-[1.5rem] shadow-sm border border-gray-200 space-y-4">
+        <h3 class="font-bold text-sm text-gray-900 uppercase tracking-tight">ความต้องการพิเศษ</h3>
+        <textarea v-model="note" placeholder="เช่น ไม่ใส่ผักชี, เผ็ดน้อยมาก..." class="w-full bg-[#f8fbff] border border-gray-200 rounded-2xl py-4 px-5 text-gray-800 outline-none focus:border-[#228085] min-h-[120px] transition-colors font-bold text-[15px] shadow-inner placeholder:text-gray-400"></textarea>
       </div>
     </div>
 
     <!-- Fixed Bottom Action -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-50 p-6 pb-8 z-40 rounded-t-[2rem] shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
-      <div class="flex items-center gap-6 mb-4 justify-center">
-        <button @click="decrement" class="w-10 h-10 bg-primary-light/20 rounded-full flex items-center justify-center text-[#228085] font-bold text-xl active:scale-90 transition-all outline-none pb-1 border border-primary-light/30">−</button>
-        <span class="text-2xl font-bold text-gray-900 w-10 text-center">{{ quantity }}</span>
-        <button @click="increment" class="w-10 h-10 bg-[#228085] rounded-full flex items-center justify-center text-white font-bold text-xl active:scale-90 transition-all outline-none shadow-sm pb-1">＋</button>
+    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[375px] bg-white/95 backdrop-blur-md border-t border-gray-200 p-6 pb-10 z-40 rounded-t-[2.5rem] shadow-[0_-15px_40px_rgba(0,0,0,0.08)]">
+      <div class="flex items-center gap-6 mb-5 justify-center">
+        <button @click="decrement" class="w-12 h-12 bg-[#228085]/10 rounded-full flex items-center justify-center text-[#228085] font-bold text-2xl active:scale-90 transition-all border border-[#228085]/20 pb-1">−</button>
+        <span class="text-2xl font-bold text-gray-900 w-12 text-center">{{ quantity }}</span>
+        <button @click="increment" class="w-12 h-12 bg-[#228085] rounded-full flex items-center justify-center text-white font-bold text-2xl active:scale-90 transition-all shadow-lg pb-1 shadow-teal-500/20">＋</button>
       </div>
-      <button @click="addToCart" class="w-full py-4 rounded-[1.2rem] bg-[#228085] text-white font-bold text-base shadow-lg shadow-teal-500/20 active:scale-[0.98] transition-all flex justify-between items-center px-8 outline-none">
+      <button @click="addToCart" class="w-full py-5 rounded-[22px] bg-[#228085] text-white font-bold text-[18px] shadow-xl shadow-teal-500/20 active:scale-[0.98] transition-all flex justify-between items-center px-10">
         <span>เพิ่มลงตะกร้า</span>
-        <span class="bg-white/20 px-3 py-0.5 rounded-lg text-sm">฿{{ totalPrice }}</span>
+        <span class="bg-white/20 px-4 py-1 rounded-xl text-[16px] font-bold">฿{{ totalPrice.toLocaleString() }}</span>
       </button>
     </div>
   </div>

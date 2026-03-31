@@ -50,7 +50,7 @@ const formatTime = (seconds: number) => {
 
     <div class="mb-14">
       <h2 class="text-[32px] font-bold text-[#1a1a1a] mb-1.5 tracking-tight">Verify OTP</h2>
-      <p class="text-[#7a869a] font-medium text-[17px]"> เราได้ส่งรหัส 6 หลักไปที่เบอร์ <span class="text-[#228085] font-semibold">+66 {{ phone }}</span></p>
+      <p class="text-gray-600 font-bold text-[17px]"> เราได้ส่งรหัส 6 หลักไปที่เบือ <span class="text-[#228085] font-extrabold">+66 {{ phone }}</span></p>
     </div>
 
     <div class="flex-1 space-y-12">
@@ -59,12 +59,12 @@ const formatTime = (seconds: number) => {
           v-for="(_digit, i) in otp" :key="i" :id="`otp-${i}`"
           v-model="otp[i]" type="number" maxlength="1"
           @input="handleInput(i, $event)"
-          class="w-full aspect-square text-center text-3xl font-bold bg-white border-2 border-transparent focus:border-[#228085] focus:shadow-lg focus:shadow-teal-500/10 rounded-[18px] outline-none transition-all shadow-sm no-spinner"
+          class="w-full aspect-square text-center text-3xl font-bold bg-white border-2 border-gray-100 focus:border-[#228085] focus:shadow-lg focus:shadow-teal-500/10 rounded-[18px] outline-none transition-all shadow-sm no-spinner"
         />
       </div>
 
       <div class="text-center space-y-3">
-        <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest">Expires in</p>
+        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Expires in</p>
         <p class="text-3xl font-bold text-[#1a1a1a] tracking-tight">{{ formatTime(timer) }}</p>
       </div>
 
@@ -78,7 +78,7 @@ const formatTime = (seconds: number) => {
     </div>
 
     <div class="text-center mt-auto pt-10">
-      <button class="text-[#228085] font-semibold hover:underline underline-offset-4 decoration-2 text-sm">Resend OTP Code</button>
+      <button class="text-[#228085] font-bold hover:underline underline-offset-4 decoration-2 text-[15px]">Resend OTP Code</button>
     </div>
   </div>
 </template>
