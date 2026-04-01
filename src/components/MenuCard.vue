@@ -27,8 +27,8 @@ defineEmits(['click'])
     </div>
     
     <div class="p-4 flex flex-col flex-1 gap-2">
-      <h3 class="text-[15px] font-bold text-gray-900 leading-tight">{{ item.name }}</h3>
-      <p class="text-[12px] text-gray-600 font-bold line-clamp-2 leading-relaxed">{{ item.desc }}</p>
+      <h3 class="text-[15px] font-medium text-gray-900 leading-tight">{{ item.name }}</h3>
+      <p class="text-[12px] text-gray-600 font-medium line-clamp-2 leading-relaxed">{{ item.desc }}</p>
       
       <!-- Spicy Icons (as per screenshot) -->
       <div v-if="item.spicy" class="flex gap-0.5 mt-1">
@@ -36,7 +36,7 @@ defineEmits(['click'])
       </div>
       
       <div class="mt-auto pt-2 flex items-center justify-between">
-        <span class="text-[16px] font-extrabold text-[#228085]">฿{{ item.price.toLocaleString() }}</span>
+        <span class="text-[16px] font-bold text-[#228085]">฿{{ item.price.toLocaleString() }}</span>
       </div>
     </div>
   </div>

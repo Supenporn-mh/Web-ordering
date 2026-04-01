@@ -71,9 +71,9 @@ const handleConfirmInfo = () => {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"/>
               </svg>
             </div>
-            <span class="text-[14px] text-gray-700 font-bold leading-relaxed">
+            <span class="text-[14px] text-gray-700 font-medium leading-relaxed">
               ฉันได้อ่านและยอมรับ
-              <button type="button" @click.stop="showPDPA = true" class="text-[#228085] font-bold underline underline-offset-4 decoration-2 hover:text-[#1a6367]">นโยบายความเป็นส่วนตัว (PDPA)</button>
+              <button type="button" @click.stop="showPDPA = true" class="text-[#228085] font-semibold underline underline-offset-4 decoration-2 hover:text-[#1a6367]">นโยบายความเป็นส่วนตัว (PDPA)</button>
               และยินยอมให้ระบบเก็บรักษาข้อมูลส่วนบุคคล
             </span>
           </label>

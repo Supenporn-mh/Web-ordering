@@ -1,13 +1,28 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const phoneOrEmail = ref('')
-const lang = ref<'EN' | 'TH'>((localStorage.getItem('user_lang') as 'EN' | 'TH') || 'EN')
+const lang = ref<'EN' | 'TH'>('EN')
+
+const handleInput = (e: any) => {
+  const val = e.target.value.replace(/\D/g, '') // Only numbers
+  if (val.length > 10) phoneOrEmail.value = val.slice(0, 10)
+  else phoneOrEmail.value = val
+}
+
+const setLang = (val: 'EN' | 'TH') => {
+  lang.value = val
+  localStorage.setItem('user_lang', val)
+}
+
+onMounted(() => {
+  lang.value = (localStorage.getItem('user_lang') as 'EN' | 'TH') || 'EN'
+})
 
 const handleSendOTP = () => {
-  if (phoneOrEmail.value) {
+  if (phoneOrEmail.value.length === 10) {
     router.push({ name: 'otp', query: { phone: phoneOrEmail.value, mode: 'register' } })
   }
 }
@@ -32,14 +47,14 @@ const t = {
       <!-- Lang Toggle (Teal theme) -->
       <div class="bg-[#eff8f8]/80 p-1 rounded-full flex gap-1 shadow-sm border border-white/50">
         <button 
-          @click="lang = 'EN'"
+          @click="setLang('EN')"
           :class="lang === 'EN' ? 'bg-[#228085] text-white shadow-sm' : 'text-gray-400'"
           class="px-4 py-1.5 rounded-full text-xs font-semibold transition-all"
         >
           EN
         </button>
         <button 
-          @click="lang = 'TH'"
+          @click="setLang('TH')"
           :class="lang === 'TH' ? 'bg-[#228085] text-white shadow-sm' : 'text-gray-400'"
           class="px-4 py-1.5 rounded-full text-xs font-semibold transition-all"
         >
@@ -50,7 +65,7 @@ const t = {
 
     <!-- Titles -->
     <div class="w-full max-w-sm mb-12 text-left">
-      <h1 class="text-[32px] font-bold text-[#1a1a1a] mb-1.5 tracking-tight">{{ t.register[lang] }}</h1>
+      <h1 class="text-[32px] font-medium text-[#1a1a1a] mb-1.5 tracking-tight leading-tight">{{ t.register[lang] }}</h1>
       <p class="text-[#7a869a] font-medium text-lg leading-tight">{{ t.subTitle[lang] }}</p>
     </div>
 
@@ -60,15 +75,17 @@ const t = {
         <label class="text-[14px] font-semibold text-[#1a1a1a] block ml-1 uppercase tracking-wider">Phone / Email</label>
         <input 
           v-model="phoneOrEmail"
-          type="text" 
-          placeholder="Enter phone or email"
+          type="tel" 
+          maxlength="10"
+          placeholder="08X XXX XXXX"
+          @input="handleInput"
           class="w-full bg-white border-none focus:ring-2 focus:ring-[#228085]/50 rounded-[18px] py-4.5 px-6 text-gray-700 font-medium outline-none transition-all placeholder:text-gray-300 shadow-sm text-[16px]"
         />
       </div>
 
       <button 
         @click="handleSendOTP"
-        :disabled="!phoneOrEmail"
+        :disabled="phoneOrEmail.length < 10"
         class="w-full py-4.5 rounded-[18px] bg-[#228085] text-white font-semibold text-lg shadow-lg shadow-teal-500/20 active:scale-[0.98] transition-all hover:brightness-110 disabled:bg-[#bfc5c5] disabled:shadow-none disabled:active:scale-100"
       >
         {{ t.sendOtp[lang] }}

@@ -55,6 +55,18 @@ const canProceed = computed(() => {
 
 const handlePay = () => {
   if (!canProceed.value) return
+  
+  // Handover data to success page before clearing cart
+  const currentCart = localStorage.getItem('cart')
+  if (currentCart) {
+    localStorage.setItem('last_order_receipt', currentCart)
+    localStorage.setItem('last_order_discount', localStorage.getItem('discount') || '0')
+    localStorage.removeItem('cart')
+    localStorage.removeItem('discount')
+    localStorage.removeItem('orderNote')
+    localStorage.removeItem('putInBox')
+  }
+  
   router.push({ name: 'success' })
 }
 </script>
@@ -66,7 +78,7 @@ const handlePay = () => {
       <button @click="router.back()" class="p-2 rounded-xl text-gray-900 active:scale-90 absolute left-5">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
       </button>
-      <h1 class="text-[18px] font-bold text-gray-800 mx-auto tracking-tight">สรุปคำสั่งซื้อ</h1>
+      <h1 class="text-[18px] font-medium text-gray-800 mx-auto tracking-tight">สรุปคำสั่งซื้อ</h1>
     </div>
 
     <div class="px-4 pt-6 pb-10 space-y-4">
@@ -78,14 +90,14 @@ const handlePay = () => {
           </div>
           <!-- Info -->
           <div class="flex-1 min-w-0">
-            <p class="text-[16px] font-bold text-gray-500 mb-1">{{ deliveryOption === 'delivery' ? 'จัดส่งไปที่' : 'ช่องทางการรับอาหาร' }}</p>
+            <p class="text-[16px] font-medium text-gray-500 mb-1">{{ deliveryOption === 'delivery' ? 'จัดส่งไปที่' : 'ช่องทางการรับอาหาร' }}</p>
             <template v-if="deliveryOption === 'delivery'">
-              <p class="text-[18px] font-bold text-gray-900 leading-tight">ห้องพัก {{ room }} — HN {{ hn }}</p>
+              <p class="text-[18px] font-semibold text-gray-900 leading-tight">ห้องพัก {{ room }} — HN {{ hn }}</p>
             </template>
             <template v-else>
-              <p class="text-[18px] font-bold text-gray-900 leading-tight">รับอาหารด้วยตนเอง (Pickup)</p>
+              <p class="text-[18px] font-semibold text-gray-900 leading-tight">รับอาหารด้วยตนเอง (Pickup)</p>
             </template>
-            <p class="text-[14px] text-gray-600 mt-2 font-bold tracking-tight">
+            <p class="text-[14px] text-gray-600 mt-2 font-medium tracking-tight">
                หมายเหตุ: 
                {{ deliveryOption === 'delivery' ? (putInBox === 'true' ? 'ใส่กล่อง' : 'ปกติ') : (pickupMode === 'dine-in' ? 'ทานที่ร้าน' : 'รับกลับบ้าน') }}
                {{ orderNote ? ', ' + orderNote : '' }}
@@ -93,15 +105,15 @@ const handlePay = () => {
           </div>
           <!-- Time (Top Right) -->
           <div class="text-right shrink-0">
-            <p class="text-[14px] text-gray-500 font-bold uppercase tracking-wider">เวลา</p>
-            <p class="text-[16px] font-bold text-[#228085]">{{ pickupTime }}</p>
+            <p class="text-[14px] text-gray-500 font-medium uppercase tracking-wider">เวลา</p>
+            <p class="text-[16px] font-semibold text-[#228085]">{{ pickupTime }}</p>
           </div>
         </div>
       </div>
 
       <!-- Payment Option Selection (Standardized rounded-[24px]) -->
       <div class="px-1">
-        <p class="text-[16px] font-bold text-gray-400 mb-4 ml-1">เลือกรูปแบบการชำระ</p>
+        <p class="text-[16px] font-medium text-gray-400 mb-4 ml-1">เลือกรูปแบบการชำระ</p>
         <div class="grid grid-cols-2 gap-4">
           <!-- Instant Pay -->
           <button
@@ -110,7 +122,7 @@ const handlePay = () => {
             class="rounded-[24px] border-2 p-6 text-left transition-all active:scale-95 flex flex-col items-start gap-1"
           >
             <div>
-              <p class="text-[18px] font-bold text-gray-900 leading-tight">ชำระทันที</p>
+              <p class="text-[18px] font-semibold text-gray-900 leading-tight">ชำระทันที</p>
               <p class="text-[14px] text-gray-400 mt-1 leading-snug">ชำระผ่านช่องทางที่เลือก</p>
             </div>
             <div v-if="payTiming === 'now'" class="w-7 h-7 rounded-full bg-[#228085] flex items-center justify-center mt-2">
@@ -125,7 +137,7 @@ const handlePay = () => {
             class="rounded-[24px] border-2 p-6 text-left transition-all active:scale-95 flex flex-col items-start gap-1"
           >
             <div>
-              <p class="text-[18px] font-bold text-gray-900 leading-tight">ชำระภายหลัง</p>
+              <p class="text-[18px] font-semibold text-gray-900 leading-tight">ชำระภายหลัง</p>
               <p class="text-[14px] text-gray-400 mt-1 leading-snug">ชำระเมื่อได้รับอาหาร</p>
             </div>
             <div v-if="payTiming === 'later'" class="w-7 h-7 rounded-full bg-[#228085] flex items-center justify-center mt-2">
@@ -137,34 +149,34 @@ const handlePay = () => {
 
       <!-- Item Summary Card (Standardized rounded-[24px]) -->
       <div class="bg-white rounded-[24px] p-5 shadow-sm border border-gray-200">
-        <h2 class="text-[16px] font-bold text-gray-500 mb-4 border-b border-gray-200 pb-2">รายการออเดอร์</h2>
+        <h2 class="text-[16px] font-medium text-gray-500 mb-4 border-b border-gray-200 pb-2">รายการออเดอร์</h2>
         
         <div class="space-y-4">
           <div v-for="item in cartItems" :key="item.id" class="flex justify-between items-start pb-4 border-b border-gray-200 last:border-0 last:pb-0">
             <div class="flex-1 min-w-0">
-               <p class="text-[16px] font-bold text-gray-800 leading-tight"><span class="text-[#228085]">{{ item.qty || item.quantity }}x</span> {{ item.name }}</p>
+               <p class="text-[16px] font-semibold text-gray-800 leading-tight"><span class="text-[#228085]">{{ item.qty || item.quantity }}x</span> {{ item.name }}</p>
                <p v-if="item.desc || item.note" class="text-[13px] text-gray-400 mt-1.5 line-clamp-1">+ {{ item.desc || item.note }}</p>
             </div>
-            <span class="text-[18px] font-bold text-gray-900 ml-4">฿{{ (item.price * (item.qty || item.quantity)).toLocaleString() }}</span>
+            <span class="text-[18px] font-semibold text-gray-900 ml-4">฿{{ (item.price * (item.qty || item.quantity)).toLocaleString() }}</span>
           </div>
         </div>
 
         <div class="pt-6 border-t-2 border-dashed border-gray-200 space-y-3">
           <div class="flex justify-between items-center text-[16px] text-gray-600 font-medium tracking-tight">
              <span>ยอดรวม</span>
-             <span class="font-bold text-gray-900">฿{{ subtotal.toLocaleString() }}</span>
+             <span class="font-semibold text-gray-900">฿{{ subtotal.toLocaleString() }}</span>
           </div>
-          <div v-if="discount > 0" class="flex justify-between items-center text-[16px] text-red-500 font-bold tracking-tight">
+          <div v-if="discount > 0" class="flex justify-between items-center text-[16px] text-red-500 font-semibold tracking-tight">
              <span>ส่วนลด</span>
-             <span class="font-bold">-฿{{ discount.toLocaleString() }}</span>
+             <span class="font-semibold">-฿{{ discount.toLocaleString() }}</span>
           </div>
           <div class="flex justify-between items-center text-[16px] text-gray-600 font-medium pb-2 tracking-tight">
              <span>ภาษี (7%)</span>
-             <span class="font-bold text-gray-900">฿{{ tax.toLocaleString(undefined, { minimumFractionDigits: 2 }) }}</span>
+             <span class="font-semibold text-gray-900">฿{{ tax.toLocaleString(undefined, { minimumFractionDigits: 2 }) }}</span>
           </div>
           <div class="flex justify-between items-center pt-4 border-t border-gray-200">
-             <span class="text-[18px] font-bold text-gray-900">ยอดรวมสุทธิ</span>
-             <span class="text-[24px] font-black text-[#228085]">฿{{ total.toLocaleString(undefined, { minimumFractionDigits: 2 }) }}</span>
+             <span class="text-[18px] font-semibold text-gray-900">ยอดรวมสุทธิ</span>
+             <span class="text-[24px] font-semibold text-[#228085]">฿{{ total.toLocaleString(undefined, { minimumFractionDigits: 2 }) }}</span>
           </div>
         </div>
       </div>
@@ -175,7 +187,7 @@ const handlePay = () => {
       <button
         @click="handlePay"
         :disabled="!canProceed"
-        class="w-full py-5 rounded-[24px] font-bold text-[18px] transition-all"
+        class="w-full py-5 rounded-[24px] font-semibold text-[18px] transition-all"
         :class="canProceed
           ? 'bg-[#228085] text-white active:scale-[0.98] shadow-xl shadow-teal-500/20'
           : 'bg-gray-100 text-gray-400 cursor-not-allowed'"

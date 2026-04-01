@@ -16,6 +16,21 @@ const methods = [
   { id: 'alipay', name: 'Alipay' },
   { id: 'wechat', name: 'Wechat Pay' }
 ]
+
+const handleConfirm = () => {
+  // Handover data to success page before clearing cart
+  const currentCart = localStorage.getItem('cart')
+  if (currentCart) {
+    localStorage.setItem('last_order_receipt', currentCart)
+    localStorage.setItem('last_order_discount', localStorage.getItem('discount') || '0')
+    localStorage.removeItem('cart')
+    localStorage.removeItem('discount')
+    localStorage.removeItem('orderNote')
+    localStorage.removeItem('putInBox')
+  }
+  
+  router.push({ name: 'success' })
+}
 </script>
 
 <template>
@@ -23,20 +38,20 @@ const methods = [
     <!-- Header -->
     <div class="px-6 py-4 flex items-center bg-white border-b border-gray-50 sticky top-0 z-10">
       <button @click="router.back()" class="mr-4 text-2xl text-gray-600">←</button>
-      <h1 class="text-xl font-bold text-gray-800">เลือกช่องทางชำระเงิน</h1>
+      <h1 class="text-xl font-medium text-gray-800">เลือกช่องทางชำระเงิน</h1>
     </div>
 
     <div class="p-4 space-y-4">
       <!-- Order Summary Banner -->
       <div class="bg-[#eef4ff] rounded-2xl p-6 border border-blue-50">
-        <h4 class="text-[#004e8c] font-black text-lg mb-2">รายละเอียดคำสั่งซื้อ</h4>
-        <p class="text-[#1a7fff] text-sm font-bold">ประเภทการสั่ง: takeaway</p>
-        <p class="text-[#1a7fff] text-sm font-bold">เวลาชำระเงิน: จ่ายทีหลัง</p>
+        <h4 class="text-[#004e8c] font-medium text-lg mb-2">รายละเอียดคำสั่งซื้อ</h4>
+        <p class="text-[#1a7fff] text-sm font-medium">ประเภทการสั่ง: takeaway</p>
+        <p class="text-[#1a7fff] text-sm font-medium">เวลาชำระเงิน: จ่ายทีหลัง</p>
       </div>
 
       <!-- Payment Method List -->
       <div class="bg-white rounded-[1.5rem] p-8 shadow-sm border border-gray-50 space-y-6">
-        <h3 class="text-lg font-black text-gray-800">ช่องทางการชำระเงิน</h3>
+        <h3 class="text-lg font-medium text-gray-800">ช่องทางการชำระเงิน</h3>
         
         <div class="space-y-7">
           <label v-for="m in methods" :key="m.id" class="flex items-center gap-4 cursor-pointer group">
@@ -44,7 +59,7 @@ const methods = [
                <div v-if="selectedMethod === m.id" class="w-3 h-3 bg-[#3a7c85] rounded-full"></div>
             </div>
             <input type="radio" :value="m.id" v-model="selectedMethod" class="hidden" />
-            <span class="font-bold text-[#1f4e55] text-lg">{{ m.name }}</span>
+            <span class="font-medium text-[#1f4e55] text-lg">{{ m.name }}</span>
           </label>
         </div>
       </div>
@@ -53,19 +68,19 @@ const methods = [
     <!-- Bottom Action -->
     <div class="fixed bottom-0 left-0 right-0 bg-[#e7f4f3] p-6 pb-20 pt-2 border-t border-gray-50">
       <div class="flex justify-between items-center mb-6 px-2">
-        <span class="text-gray-900 font-black text-xl">ยอดเงินที่ต้องชำระ</span>
-        <span class="text-[#1a7fff] font-black text-2xl">฿500</span>
+        <span class="text-gray-900 font-medium text-xl">ยอดเงินที่ต้องชำระ</span>
+        <span class="text-[#1a7fff] font-semibold text-2xl">฿500</span>
       </div>
-      <button @click="router.push({ name: 'success' })" class="w-full py-5 rounded-[1rem] bg-[#1a7fff] text-white font-black text-xl shadow-lg">
+      <button @click="handleConfirm" class="w-full py-5 rounded-[1rem] bg-[#1a7fff] text-white font-semibold text-xl shadow-lg">
         ยืนยันคำสั่งซื้อ
       </button>
     </div>
 
     <!-- Bottom Nav -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-50 flex justify-around py-4 z-30">
-      <div @click="router.push({ name: 'menu' })" class="flex flex-col items-center text-gray-400 text-xs cursor-pointer">🍴<span class="mt-1 text-[10px] font-bold">เมนู</span></div>
-      <div @click="router.push({ name: 'orders' })" class="flex flex-col items-center text-[#1a7fff] text-xs cursor-pointer">📋<span class="mt-1 text-[10px] font-bold">คำสั่งซื้อ</span></div>
-      <div @click="router.push({ name: 'login' })" class="flex flex-col items-center text-gray-400 text-xs cursor-pointer">👤<span class="mt-1 text-[10px] font-bold">ออกจากระบบ</span></div>
+      <div @click="router.push({ name: 'menu' })" class="flex flex-col items-center text-gray-400 text-xs cursor-pointer">🍴<span class="mt-1 text-[10px] font-medium">เมนู</span></div>
+      <div @click="router.push({ name: 'orders' })" class="flex flex-col items-center text-[#1a7fff] text-xs cursor-pointer">📋<span class="mt-1 text-[10px] font-medium">คำสั่งซื้อ</span></div>
+      <div @click="router.push({ name: 'login' })" class="flex flex-col items-center text-gray-400 text-xs cursor-pointer">👤<span class="mt-1 text-[10px] font-medium">ออกจากระบบ</span></div>
     </div>
   </div>
 </template>

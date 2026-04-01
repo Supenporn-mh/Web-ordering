@@ -22,6 +22,11 @@ onMounted(() => {
   loadCartCount()
 })
 
+const setLang = (val: string) => {
+  currentLang.value = val
+  localStorage.setItem('user_lang', val)
+}
+
 const translations: any = {
   TH: {
     title: 'เมนู',
@@ -109,7 +114,7 @@ const addToCart = () => {
 <template>
   <div class="min-h-screen bg-[#f8fcfc] font-sans pb-32">
     <!-- Top Header (Based on screenshot: Demo | 0xxxxxxx) -->
-    <div class="bg-white px-5 pt-3 pb-4 flex justify-between items-center text-[15px] font-bold text-gray-900 border-b border-gray-100">
+    <div class="bg-white px-5 pt-3 pb-4 flex justify-between items-center text-[15px] font-medium text-gray-900 border-b border-gray-100">
       <span>Demo</span>
       <span class="text-gray-500">0xxxxxxx</span>
     </div>
@@ -117,12 +122,12 @@ const addToCart = () => {
     <!-- Title & Language Toggle -->
     <div class="px-5 pt-4 pb-2 flex justify-between items-end">
       <div>
-        <h1 class="text-[28px] font-bold text-gray-900 tracking-tight leading-none">{{ t.title }}</h1>
-        <p class="text-[14px] text-gray-600 font-bold mt-2">{{ t.subTitle }}</p>
+        <h1 class="text-[28px] font-medium text-gray-900 tracking-tight leading-none">{{ t.title }}</h1>
+        <p class="text-[14px] text-gray-600 font-medium mt-2">{{ t.subTitle }}</p>
       </div>
-      <div class="flex bg-gray-100 p-1 rounded-full text-[12px] font-bold">
-        <button @click="currentLang = 'EN'" :class="currentLang === 'EN' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-400'" class="px-3 py-1 rounded-full transition-all">EN</button>
-        <button @click="currentLang = 'TH'" :class="currentLang === 'TH' ? 'bg-[#228085] text-white shadow-sm' : 'text-gray-400'" class="px-3 py-1 rounded-full transition-all ml-1">TH</button>
+      <div class="flex bg-gray-100 p-1 rounded-full text-[12px] font-medium">
+        <button @click="setLang('EN')" :class="currentLang === 'EN' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-400'" class="px-3 py-1 rounded-full transition-all">EN</button>
+        <button @click="setLang('TH')" :class="currentLang === 'TH' ? 'bg-[#228085] text-white shadow-sm' : 'text-gray-400'" class="px-3 py-1 rounded-full transition-all ml-1">TH</button>
       </div>
     </div>
 
@@ -140,7 +145,7 @@ const addToCart = () => {
         :key="cat"
         @click="activeCategory = cat"
         :class="activeCategory === cat ? 'bg-[#228085] text-white shadow-teal-900/10' : 'bg-[#e7f4f3] text-gray-600'"
-        class="px-5 py-2.5 rounded-full text-[14px] font-bold whitespace-nowrap transition-all active:scale-95"
+        class="px-5 py-2.5 rounded-full text-[14px] font-medium whitespace-nowrap transition-all active:scale-95"
       >
         {{ cat }}
       </button>
@@ -160,7 +165,7 @@ const addToCart = () => {
     <div class="fixed bottom-28 right-6 z-40">
       <button @click="router.push({ name: 'checkout' })" class="bg-[#228085] w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-teal-900/20 active:scale-90 transition-all border-2 border-white relative">
         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-        <span v-if="cartCount > 0" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm">{{ cartCount }}</span>
+        <span v-if="cartCount > 0" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm">{{ cartCount }}</span>
       </button>
     </div>
 
@@ -168,17 +173,17 @@ const addToCart = () => {
     <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[375px] bg-white border-t border-gray-200 flex h-[85px] items-center justify-around z-50 pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.05)] px-4">
       <div class="flex flex-col items-center justify-center gap-1.5 text-[#228085] cursor-pointer w-24 h-full relative">
          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 2v10c0 1.1.9 2 2 2h2v7h2v-7h2c1.1 0 2-.9 2-2V2H6z M11 10H8V5h1v5h1V5h1v5h1V5h1v5z"/></svg>
-         <span class="text-[12px] font-bold tracking-tight">{{ t.menu }}</span>
+         <span class="text-[12px] font-medium tracking-tight">{{ t.menu }}</span>
       </div>
       
       <div @click="router.push({ name: 'orders' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-500 cursor-pointer w-24 h-full active:scale-95 transition-all">
          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-         <span class="text-[12px] font-bold tracking-tight">{{ t.orders }}</span>
+         <span class="text-[12px] font-medium tracking-tight">{{ t.orders }}</span>
       </div>
 
       <div @click="router.push({ name: 'profile' })" class="flex flex-col items-center justify-center gap-1.5 text-gray-500 cursor-pointer w-24 h-full group active:scale-95 transition-all">
          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-         <span class="text-[12px] font-bold tracking-tight">{{ t.profile }}</span>
+         <span class="text-[12px] font-medium tracking-tight">{{ t.profile }}</span>
       </div>
     </div>
 
@@ -194,16 +199,16 @@ const addToCart = () => {
         </div>
         
         <div class="p-6">
-          <h2 class="text-[20px] font-bold text-gray-900">{{ selectedItem?.name }}</h2>
+          <h2 class="text-[20px] font-medium text-gray-900">{{ selectedItem?.name }}</h2>
           <p class="text-gray-500 text-[14px] mt-2 leading-relaxed">{{ selectedItem?.desc }}</p>
           
           <div class="flex items-center justify-between mt-8">
             <div class="flex items-center bg-[#f0f4f4] rounded-full p-1.5 border border-gray-200 shadow-sm">
-              <button @click="quantity > 1 ? quantity-- : null" class="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm text-[#228085] font-bold active:scale-95 transition-all">-</button>
-              <span class="w-12 text-center font-bold text-[18px] text-gray-800">{{ quantity }}</span>
-              <button @click="quantity++" class="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm text-[#228085] font-bold active:scale-95 transition-all">+</button>
+              <button @click="quantity > 1 ? quantity-- : null" class="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm text-[#228085] font-semibold active:scale-95 transition-all">-</button>
+              <span class="w-12 text-center font-semibold text-[18px] text-gray-800">{{ quantity }}</span>
+              <button @click="quantity++" class="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm text-[#228085] font-semibold active:scale-95 transition-all">+</button>
             </div>
-            <div class="text-[24px] font-bold text-[#228085]">฿{{ (selectedItem?.price * quantity).toLocaleString() }}</div>
+            <div class="text-[24px] font-semibold text-[#228085]">฿{{ (selectedItem?.price * quantity).toLocaleString() }}</div>
           </div>
           
           <textarea 
@@ -213,7 +218,7 @@ const addToCart = () => {
             rows="3"
           ></textarea>
           
-          <button @click="addToCart" class="w-full mt-6 bg-[#228085] text-white py-4 rounded-full font-bold text-[16px] shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all">
+          <button @click="addToCart" class="w-full mt-6 bg-[#228085] text-white py-4 rounded-full font-semibold text-[16px] shadow-lg shadow-teal-900/10 active:scale-[0.98] transition-all">
             {{ t.addToCart }}
           </button>
         </div>
